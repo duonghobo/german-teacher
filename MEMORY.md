@@ -45,6 +45,8 @@ Lesson: a small on-device model can't hold many jobs in one answer and can't be 
 - About 80 phrases: verb + preposition pairs, functional verb phrases (*zur Verfügung stehen*), idioms, two-part connectors (*sowohl … als auch*, *je … desto*, *um … zu*).
 - Clauses: subordinate clauses (verb at the end), relative clauses (only after a noun), infinitive clauses, verb in position 2, separable particle at the end, tense hints (Perfekt, Plusquamperfekt, Passiv, Futur I, Konjunktiv II).
 
+10. **Writing check = a second, specialised model** (2026-10-05). Hugging Face has no small model that explains German sentences to learners, but it has one for correcting learner writing: langlm-de (EuroLLM-1.7B on Falko-MERLIN, 755 MB GGUF, MIT). It can't run in Edge Gallery (LiteRT only), so it runs in PocketPal in Slide Over; the learner is fine with a second app. It needs its raw prompt (no chat template). See docs/langlm.md.
+
 ## Discovered rules
 Patterns learned the hard way. Each one has a test.
 1. A main clause can end in "zu + infinitive" (*Das hat mit mir zu tun.*): only call it an infinitive clause after a comma. (v2)
@@ -73,3 +75,4 @@ Patterns learned the hard way. Each one has a test.
 - 2026-10-05: v2. Merged into one skill with on-device memory (save, fix, mistake, quiz/review, recall, stats, export) and the evolution/ loop. Repo root is the skill (ZIP → import folder). 13 tests.
 - 2026-10-05: v2.1. First on-device output came from the old pasted prompt (7 sections, "haben" as a new word, invented meaning), so the format now travels inside every tool result. German answers by default, `settings` for English, 80 checked phrase examples, 3 examples per word. Fixed rule 3. 15 tests.
 - 2026-10-05: v2.2. First on-device run of v2.1: the skill ran (German format visible), but "Befriff haben" came back as one unknown noun and Gemma echoed the tool output. Added typo correction, multi-word lookup, and facts-vs-answer framing. Rules 4–5.
+- 2026-10-05: Model search. No small German *tutor* model exists; langlm-de added as the writing checker in PocketPal (docs/langlm.md). Reading stays with Gemma + skill.

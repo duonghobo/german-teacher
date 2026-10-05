@@ -31,6 +31,9 @@ If your app version has no local import, use **Load skill from URL** with `https
 | `my words` · `stats` | what is saved, what is due |
 | `export` | text block of new corrections and mistakes: paste it to Claude to make them permanent |
 
+## Checking your own writing
+For corrections of your own German, a second, purpose-built model works better: **langlm-de** in PocketPal (Slide Over next to GoodNotes and Edge Gallery). Setup and error-code cheat sheet: [docs/langlm.md](docs/langlm.md).
+
 ## How it evolves
 ```
 on the iPad (instant)                       in this repo (permanent, tested)
