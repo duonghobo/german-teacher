@@ -118,3 +118,12 @@ test('several words: content words and fixed phrases, no noise', () => {
   assert.match(sich, /FIXED PHRASE: sich freuen auf/);
   assert.doesNotMatch(sich, /UNKNOWN: auf/);
 });
+
+test('looking up a noun lists the fixed phrases built with it', () => {
+  const out = formatWord('Begriff haben');
+  assert.match(out, /NOUN: der Begriff/);
+  assert.match(out, /PHRASE WITH THIS WORD: im Begriff sein, etwas zu tun = to be about to do something/);
+  assert.match(out, /schwer von Begriff sein/);
+  assert.match(formatWord('Heimweh'), /Heimweh haben/);
+  assert.deepEqual(phraseNames('Ich denke, die neuen Wörter haben mit dem Begriff Heimat zu tun.'), ['mit etwas zu tun haben']);
+});

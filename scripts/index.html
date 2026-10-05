@@ -607,6 +607,10 @@ const PHRASES = [
   ['unter vier Augen', 'in private, one-to-one', '', `vier + augen + unter`],
   ['zwei Fliegen mit einer Klappe schlagen', 'to kill two birds with one stone', '', `fliegen + klappe`],
   ['Das ist nicht mein Bier', 'that is not my problem', '', `bier + nicht`],
+  ['im Begriff sein, etwas zu tun', 'to be about to do something', 'zu + infinitive', `im + begriff + V:sein`],
+  ['jemandem ein Begriff sein', 'to be familiar to someone, to ring a bell', 'Dat', `ein|kein + begriff + V:sein`],
+  ['(k)einen Begriff haben von', 'to have (no) idea of something', 'von + Dat', `einen|keinen + begriff + V:haben`],
+  ['schwer von Begriff sein', 'to be slow on the uptake', '', `schwer + von + begriff`],
   ['sowohl ... als auch', 'both ... and', 'two-part connector', `sowohl + als`],
   ['weder ... noch', 'neither ... nor', 'two-part connector', `weder + noch`],
   ['entweder ... oder', 'either ... or', 'two-part connector', `entweder + oder`],
@@ -694,6 +698,10 @@ const PHRASE_EXAMPLES = {
   'unter vier Augen': ['Können wir unter vier Augen sprechen?', 'Can we talk in private?'],
   'zwei Fliegen mit einer Klappe schlagen': ['So schlagen wir zwei Fliegen mit einer Klappe.', 'That way we kill two birds with one stone.'],
   'Das ist nicht mein Bier': ['Wie er das macht, ist nicht mein Bier.', 'How he does it is not my problem.'],
+  'im Begriff sein, etwas zu tun': ['Ich war gerade im Begriff zu gehen.', 'I was just about to leave.'],
+  'jemandem ein Begriff sein': ['Der Name ist mir ein Begriff.', 'The name rings a bell.'],
+  '(k)einen Begriff haben von': ['Du hast keinen Begriff davon, wie schwer das ist.', 'You have no idea how hard that is.'],
+  'schwer von Begriff sein': ['Heute bin ich etwas schwer von Begriff.', 'I am a bit slow on the uptake today.'],
   'sowohl ... als auch': ['Sie spricht sowohl Deutsch als auch Englisch.', 'She speaks both German and English.'],
   'weder ... noch': ['Ich habe weder Zeit noch Geld.', 'I have neither time nor money.'],
   'entweder ... oder': ['Entweder kommst du mit, oder du bleibst hier.', 'Either you come along, or you stay here.'],
@@ -921,6 +929,11 @@ function formatOne(w) {
     if (w.reflexive_meanings) lines.push(`with/without "sich": ${w.reflexive_meanings}`);
   } else if (w.kind === 'noun') {
     lines.push(`NOUN: ${w.gender} ${w.noun} (${sure})`, `plural: ${w.plural}`);
+    const key = String(w.noun).toLowerCase();
+    PHRASES.filter((p) => p.groups.some((g) => g.words && g.words.has(key))).forEach((p) => {
+      const ex = PHRASE_EXAMPLES[p.phrase];
+      lines.push(`PHRASE WITH THIS WORD: ${p.phrase} = ${p.meaning}${ex ? `. Beispiel: ${ex[0]} (${ex[1]})` : ''}`);
+    });
   } else {
     lines.push(`UNKNOWN: ${w.word}`);
   }

@@ -55,6 +55,8 @@ Patterns learned the hard way. Each one has a test.
 4. Small models sometimes paste the tool output as their answer. Frame it: first line "FAKTEN FÜR DICH (nicht zeigen)", last line "Schreib jetzt deine eigene Antwort", and say it in SKILL.md too. (v2.2)
 5. Learners type fast: typos (*Befriff*) and several words (*Begriff haben*) reach the word lookup. Correct to the closest known word (edit distance 1–2) and split multi-word input into content words plus fixed phrases; skip articles, prepositions and basic verbs. (v2.2)
 
+6. A noun lookup should surface the idioms built on that noun (*Begriff* → *im Begriff sein*, *ein Begriff sein*, *schwer von Begriff sein*). Learners often ask about a noun when they really met an idiom. Idiom patterns need their article (*einen/keinen Begriff haben*) so ordinary sentences with "Begriff … haben" don't match. (v2.3)
+
 ## Open questions
 - Does the iOS app support "Import local skill" from a Files folder? (second-brain's README says yes for iOS 17+.)
 - Does memory survive closing the app, and re-importing a new version? First on-device test.
@@ -75,3 +77,4 @@ Patterns learned the hard way. Each one has a test.
 - 2026-10-05: v2.1. First on-device output came from the old pasted prompt (7 sections, "haben" as a new word, invented meaning), so the format now travels inside every tool result. German answers by default, `settings` for English, 80 checked phrase examples, 3 examples per word. Fixed rule 3. 15 tests.
 - 2026-10-05: v2.2. First on-device run of v2.1: the skill ran (German format visible), but "Befriff haben" came back as one unknown noun and Gemma echoed the tool output. Added typo correction, multi-word lookup, and facts-vs-answer framing. Rules 4–5.
 - 2026-10-05: Model search. No small German *tutor* model exists; langlm-de added as the writing checker in PocketPal (docs/langlm.md). Reading stays with Gemma + skill.
+- 2026-10-05: v2.3. "Begriff haben" asked on device (and to Siri, which failed). Added 4 Begriff idioms with examples; noun lookups now list idioms containing the noun. Rule 6.
