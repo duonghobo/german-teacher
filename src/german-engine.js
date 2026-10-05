@@ -672,7 +672,7 @@ function analyzeClause(words, index, prev) {
     out.type = 'relative clause (probably)';
     out.starts_with = words.slice(0, startIdx + 1).join(' ');
     out.verb_position = `the conjugated verb goes to the END: "${words[words.length - 1]}"`;
-  } else if (lower.includes('zu') && lower[lower.length - 2] === 'zu') {
+  } else if (index > 0 && lower.includes('zu') && lower[lower.length - 2] === 'zu') {
     out.type = 'infinitive clause';
     out.verb_position = `"zu" + infinitive at the end: "zu ${words[words.length - 1]}"`;
   } else {

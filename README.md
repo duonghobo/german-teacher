@@ -1,38 +1,56 @@
 # German Teacher for Google AI Edge Gallery
 
-An offline German teacher for reading German books on an iPad or phone. The on-device model (Gemma in [Google AI Edge Gallery](https://github.com/google-ai-edge/gallery)) explains sentences; two Agent Skills give it **checked grammar facts** so it stops guessing.
+An offline German teacher with memory, for reading German books on an iPad or phone. The on-device model (Gemma in [Google AI Edge Gallery](https://github.com/google-ai-edge/gallery)) explains; this Agent Skill gives it **checked grammar facts** and a **memory that survives between chats**: your saved words, your corrections, your recurring mistakes.
 
-| Skill | Gemma uses it when you send | It returns |
-|---|---|---|
-| [`german-sentence-coach`](german-sentence-coach/) | a sentence, or a photo of text | clauses and verb positions, separable verbs (*kommt … an* → *ankommen*), tense hints, ~80 fixed phrases and two-part connectors, irregular verb forms, plus the answer format |
-| [`german-word-forms`](german-word-forms/) | one word, or `word: X` | nouns: der/die/das + plural; verbs: Präteritum, Partizip II, haben/sein, separable prefix, meanings with *sich* |
+**The whole repo folder is the skill.** `SKILL.md` and `scripts/index.html` sit at the root; everything else is ignored by the app.
 
-Everything runs inside the skill's `scripts/index.html`: no network, no API key.
+## Install (ZIP → folder)
+1. On the iPad, open this repo in Safari → **Code → Download ZIP**.
+2. In the **Files** app, tap `german-teacher-main.zip` to extract it. You get a folder `german-teacher-main` with `SKILL.md` inside.
+3. In Edge Gallery: **Agent Skills → + → Import local skill** (may be labelled *Import from local file*) → choose the folder `german-teacher-main`.
+4. Paste the [system prompt](SYSTEM_PROMPT.md) into the chat.
+5. Test (airplane mode on):
+   - send `Die neuen Wörter haben mit dem Begriff Heimat zu tun.` → must find *mit etwas zu tun haben*
+   - send `save: mit etwas zu tun haben = to have to do with`
+   - **close Edge Gallery completely, reopen it**, send `stats` → must say `Saved: 1` and `saved between chats`
 
-## Install
-1. GitHub Pages serves this repo at `https://duonghobo.github.io/german-teacher/`.
-2. In Edge Gallery: **Agent Skills → + → Load skill from URL**:
-   - `https://duonghobo.github.io/german-teacher/german-sentence-coach`
-   - `https://duonghobo.github.io/german-teacher/german-word-forms`
-3. Paste the [system prompt](SYSTEM_PROMPT.md) into the chat.
-4. Turn on airplane mode and send a test sentence (see below) to confirm it works offline.
+If your app version has no local import, use **Load skill from URL** with `https://duonghobo.github.io/german-teacher` (needs GitHub Pages on: Settings → Pages → main / root).
+
+**Updating:** download the new ZIP and import again. Your memory is kept on the device, not in the folder, so it should survive an update. Run `export` first anyway, to be safe.
 
 ## Use
-| You send | You get |
+| You send | What happens |
 |---|---|
 | a sentence from the book, or a screenshot | meaning, tense, structure, fixed phrases, key words, a flashcard line |
-| `word: Heimat` / `word: sich vorstellen` | correct forms and meanings |
-| `check: <your own German sentence>` | a correction and your main mistake |
-| `quiz` | 3 questions on what you covered |
+| `word: Heimat` · `word: sich vorstellen` | correct forms and meanings |
+| `save: X = meaning` | saves X for spaced review (1, 3, 7, 14, 30 days) |
+| `quiz` | asks what is due today, plus your recurring mistakes |
+| `fix: Bahnhofsuhr is die Bahnhofsuhr, -en` | **self-correction**: overrides the built-in tables from now on |
+| `check: <your own German>` | corrects it and logs the mistake |
+| `my words` · `stats` | what is saved, what is due |
+| `export` | text block of new corrections and mistakes: paste it to Claude to make them permanent |
 
-Test sentences:
-- `Die neuen Wörter haben mit dem Begriff Heimat zu tun.` → must find *mit etwas zu tun haben*
-- `Der Zug kommt um acht Uhr an.` → must find *ankommen*
-- `Ich verstehe nur Bahnhof.` → must find the idiom
+## How it evolves
+```
+on the iPad (instant)                       in this repo (permanent, tested)
+fix: / check:  ──► memory on the device ──► export ──► evolution/*.jsonl
+                     (overrides tables)                 ──► data tables + tests in src/
+                                                        ──► MEMORY.md "Discovered rules"
+                                                        ──► new ZIP ──► import again
+```
+- **Memory** (`localStorage` + IndexedDB inside the skill) changes behaviour immediately, offline.
+- **The repo** turns exported corrections into table rows with tests, so they work for everyone and never get lost. See [MEMORY.md](MEMORY.md) and [evolution/](evolution/).
 
 ## Develop
 ```
-npm test        # 9 tests: grammar facts + the built skills run like Edge Gallery calls them
-npm run build   # regenerates the skill folders from src/
+npm test        # 13 tests: grammar facts, memory, and the built page run like Edge Gallery calls it
+npm run build   # regenerates SKILL.md and scripts/index.html from src/
 ```
-Data lives in `src/german-engine.js` (verb table, noun table, phrase list). Add rows there, add a test, rebuild. See [MEMORY.md](MEMORY.md) for why it is built this way.
+| File | Role |
+|---|---|
+| `src/german-engine.js` | verb table, noun table, ~80 fixed phrases, clause analysis |
+| `src/memory.js` | on-device memory: saved words, corrections, mistakes, spaced review, export |
+| `src/skill.js` | one entry point, `action` → handler |
+| `src/build.ts` | writes `SKILL.md` + `scripts/index.html` (everything inlined, no network) |
+| `MEMORY.md` | project memory: decisions, what failed, discovered rules, log |
+| `evolution/` | exported corrections and mistakes, version history |

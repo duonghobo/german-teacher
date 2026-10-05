@@ -83,6 +83,8 @@ test('sentence structure: clauses, separable verbs, tense hints', () => {
   const d = analyzeSentence('Das ist der Mann, der in Berlin wohnt.');
   assert.equal(d.clauses[1].type, 'relative clause (probably)');
 
+  assert.equal(analyzeSentence('Das hat mit mir zu tun.').clauses[0].type, 'main clause');
+
   const e = analyzeSentence('Das Haus wurde 1990 gebaut.');
   assert.ok(e.clauses[0].tense_hints.some((h: string) => h.startsWith('Passiv')));
 });

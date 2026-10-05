@@ -1,0 +1,2 @@
+{"date":"2026-10-05","version":"1.0.0","change":"initial","details":"Two skills: german-sentence-coach, german-word-forms. Prompts v1-v3 failed on genders, verb forms and fixed phrases (see MEMORY.md)."}
+{"date":"2026-10-05","version":"2.0.0","change":"memory","details":"Merged into one skill (german-teacher) so memory is shared. On-device memory: saved words with spaced review, verified corrections that override the tables, learner mistakes. Export loop to evolution/. Fixed: main clause with zu + infinitive was labelled an infinitive clause."}
