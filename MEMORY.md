@@ -51,6 +51,9 @@ Patterns learned the hard way. Each one has a test.
 2. A saved phrase rarely appears word for word (*mit etwas zu tun haben* → *hat mit mir zu tun*): match saved items through the fixed-phrase finder, not only by words. (v2)
 3. A clause after a comma that ends in "zu + infinitive" is only an infinitive clause if it has no conjugated verb of its own (*Ich denke, die Wörter haben … zu tun* is a main clause) or starts with um/ohne/(an)statt. (v2.1)
 
+4. Small models sometimes paste the tool output as their answer. Frame it: first line "FAKTEN FÜR DICH (nicht zeigen)", last line "Schreib jetzt deine eigene Antwort", and say it in SKILL.md too. (v2.2)
+5. Learners type fast: typos (*Befriff*) and several words (*Begriff haben*) reach the word lookup. Correct to the closest known word (edit distance 1–2) and split multi-word input into content words plus fixed phrases; skip articles, prepositions and basic verbs. (v2.2)
+
 ## Open questions
 - Does the iOS app support "Import local skill" from a Files folder? (second-brain's README says yes for iOS 17+.)
 - Does memory survive closing the app, and re-importing a new version? First on-device test.
@@ -69,3 +72,4 @@ Patterns learned the hard way. Each one has a test.
 - 2026-10-05: Interviewed the learner. Setup: Split View + prompt. Prompts v1–v3 tried and failed as described above. Built skills v1 (2 skills, 9 tests). Published this repo.
 - 2026-10-05: v2. Merged into one skill with on-device memory (save, fix, mistake, quiz/review, recall, stats, export) and the evolution/ loop. Repo root is the skill (ZIP → import folder). 13 tests.
 - 2026-10-05: v2.1. First on-device output came from the old pasted prompt (7 sections, "haben" as a new word, invented meaning), so the format now travels inside every tool result. German answers by default, `settings` for English, 80 checked phrase examples, 3 examples per word. Fixed rule 3. 15 tests.
+- 2026-10-05: v2.2. First on-device run of v2.1: the skill ran (German format visible), but "Befriff haben" came back as one unknown noun and Gemma echoed the tool output. Added typo correction, multi-word lookup, and facts-vs-answer framing. Rules 4–5.

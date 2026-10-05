@@ -19,6 +19,8 @@ const FORMAT = {
 6. KARTE: Vorderseite: <Ausdruck in einem kurzen deutschen Satz> | Rückseite: <Bedeutung>
 Grammatikbegriffe auf Deutsch (Präsens, Akkusativ, Nebensatz). Nichts davor, nichts danach.`,
     word: `ANTWORTE AUF DEUTSCH (einfaches Deutsch, Niveau B1):
+- Wenn oben TYPO steht: beginne mit "Meintest du: ...?".
+- Wenn oben FIXED PHRASE steht: erkläre zuerst den Ausdruck, mit dem Beispiel vom Tool.
 - FORMEN: genau wie vom Tool, nichts ändern.
 - BEDEUTUNGEN: nummeriert; jede Bedeutung auf Deutsch erklärt, dann (English: ...).
 - BEISPIELE: 3 kurze Sätze, ein Satz pro Bedeutung, jeder mit (English: ...).{saved}
@@ -34,12 +36,24 @@ Grammatikbegriffe auf Deutsch (Präsens, Akkusativ, Nebensatz). Nichts davor, ni
 6. CARD: Front: <key phrase in a short German sentence> | Back: <its meaning>
 Nothing before or after.`,
     word: `ANSWER IN ENGLISH:
+- If TYPO appears above: start with "Did you mean: ...?".
+- If FIXED PHRASE appears above: explain the phrase first, with the tool's example.
 - FORMS: exactly as the tool gives them.
 - MEANINGS: numbered, each explained.
 - EXAMPLES: 3 short German sentences, one per meaning, each with its English translation.{saved}
 - WITH/WITHOUT "SICH": only if the tool gives it.`,
   },
 };
+
+const WRAP = {
+  de: ['FAKTEN FÜR DICH (dem Lernenden NICHT zeigen, nicht kopieren):', 'Schreib jetzt DEINE EIGENE Antwort an den Lernenden in diesem Format. Kopiere nichts von oben wörtlich, außer Formen und Beispielen.'],
+  en: ['FACTS FOR YOU (do NOT show or copy these to the learner):', 'Now write YOUR OWN answer to the learner in this format. Do not copy anything above word for word, except forms and examples.'],
+};
+
+function wrap(mem, facts, format) {
+  const lang = (mem.data.prefs && mem.data.prefs.lang) === 'en' ? 'en' : 'de';
+  return `${WRAP[lang][0]}\n${facts}\n\n${WRAP[lang][1]}\n${format}`;
+}
 
 function answerFormat(mem, kind, savedExample) {
   const lang = (mem.data.prefs && mem.data.prefs.lang) === 'en' ? 'en' : 'de';
@@ -72,13 +86,13 @@ function handle(input, mem, now = Date.now()) {
     case 'analyze': {
       const sentence = need('sentence');
       if (!sentence) return { error: 'Missing field "sentence".' };
-      return { result: `${withMemory(mem, sentence, formatSentence(sentence))}\n\n${answerFormat(mem, 'analyze')}` };
+      return { result: wrap(mem, withMemory(mem, sentence, formatSentence(sentence)), answerFormat(mem, 'analyze')) };
     }
     case 'word': {
       const word = need('word');
       if (!word) return { error: 'Missing field "word".' };
       const saved = mem.data.vocab[memKey(word)];
-      return { result: `${withMemory(mem, word, formatWord(word))}\n\n${answerFormat(mem, 'word', saved && saved.example)}` };
+      return { result: wrap(mem, withMemory(mem, word, formatWord(word)), answerFormat(mem, 'word', saved && saved.example)) };
     }
     case 'save': return { result: saveWord(mem, { item: need('item'), meaning: need('meaning'), example: need('example') }, now) };
     case 'fix': return { result: addCorrection(mem, { item: need('item'), correction: need('correction') }, now) };

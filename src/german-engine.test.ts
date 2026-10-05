@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { verbInfo, nounInfo, wordInfo, analyzeSentence, findPhrases, PHRASES, PHRASE_EXAMPLES } from './german-engine.js';
+import { formatWord, verbInfo, nounInfo, wordInfo, analyzeSentence, findPhrases, PHRASES, PHRASE_EXAMPLES } from './german-engine.js';
 
 const phraseNames = (s: string) => findPhrases(s).map((p: { phrase: string }) => p.phrase);
 
@@ -99,4 +99,22 @@ test('every fixed phrase has an example, and the example contains the phrase', (
     assert.ok(ex, `missing example for "${p.phrase}"`);
     assert.ok(phraseNames(ex[0]).includes(p.phrase), `example "${ex[0]}" does not match "${p.phrase}"`);
   }
+});
+
+test('typos are corrected to the closest known word', () => {
+  assert.equal(wordInfo('Befriff').did_you_mean, 'Begriff');
+  assert.equal(wordInfo('Heimt').gender, 'die');
+  assert.equal(wordInfo('komen').infinitive, 'kommen');
+  assert.equal(wordInfo('Heimat').did_you_mean, undefined);
+  assert.equal(wordInfo('Xyzabc').gender, 'unknown');
+});
+
+test('several words: content words and fixed phrases, no noise', () => {
+  const out = formatWord('Befriff haben');
+  assert.match(out, /TYPO: .*"Befriff".*"Begriff"/);
+  assert.match(out, /NOUN: der Begriff/);
+  assert.doesNotMatch(out, /VERB: haben/); // basic words skipped when there is a content word
+  const sich = formatWord('sich freuen auf');
+  assert.match(sich, /FIXED PHRASE: sich freuen auf/);
+  assert.doesNotMatch(sich, /UNKNOWN: auf/);
 });

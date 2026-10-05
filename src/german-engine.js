@@ -818,17 +818,67 @@ function analyzeSentence(sentence) {
   };
 }
 
-function wordInfo(raw) {
+// ---------- Typos: closest known word ----------
+function editDistance(a, b) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    }
+  }
+  return d[a.length][b.length];
+}
+
+function closestKnown(word) {
+  const w = word.toLowerCase();
+  const max = w.length <= 4 ? 1 : 2;
+  let best = null;
+  const consider = (cand, kind) => {
+    const dist = editDistance(w, cand.toLowerCase());
+    if (dist > 0 && dist <= max && (!best || dist < best.dist)) best = { word: cand, kind, dist };
+  };
+  for (const n of NOUNS.values()) consider(n.word, 'noun');
+  for (const v of VERBS.keys()) consider(v, 'verb');
+  return best;
+}
+
+const SKIP_WORDS = new Set(['der', 'die', 'das', 'den', 'dem', 'des', 'ein', 'eine', 'einen', 'einem', 'einer', 'eines', 'sich', 'etwas', 'jemanden', 'jemandem']);
+const BASIC_WORDS = new Set(['haben', 'sein', 'werden', 'machen', 'tun', 'gehen', 'kommen']);
+
+function singleWordInfo(raw) {
   const w = raw.trim().replace(/^sich\s+/i, '');
   const lower = w.toLowerCase();
   const isNounLike = /^(der|die|das)\s/i.test(raw.trim()) || (w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase());
   if (!isNounLike) {
-    if (VERBS.has(lower) || /(en|ern|eln|n)$/.test(lower) && !FORM_INDEX.has(lower)) return { kind: 'verb', ...verbInfo(lower) };
+    if (VERBS.has(lower)) return { kind: 'verb', ...verbInfo(lower) };
     const hit = FORM_INDEX.get(lower);
     if (hit) return { kind: 'verb', form_given: w, ...verbInfo(hit.inf) };
+    const near = closestKnown(lower);
+    if (near && near.dist === 1) return { did_you_mean: near.word, typed: w, ...singleWordInfo(near.kind === 'noun' ? near.word : near.word) };
+    if (/(en|ern|eln|n)$/.test(lower)) return { kind: 'verb', ...verbInfo(lower) };
     return { kind: 'unknown', word: w, note: 'Not a verb in the table. If it is a noun, send it with a capital letter. Otherwise check the dictionary.' };
   }
-  return { kind: 'noun', ...nounInfo(w) };
+  const info = nounInfo(w);
+  if (info.source === 'none' || info.source === 'rule') {
+    const near = closestKnown(w.replace(/^(der|die|das)\s+/i, ''));
+    if (near && (info.source === 'none' || near.dist === 1)) return { did_you_mean: near.word, typed: w, ...singleWordInfo(near.word) };
+  }
+  return { kind: 'noun', ...info };
+}
+
+// One word, or several ("Begriff haben", "einen Begriff haben"): each content word, plus any fixed phrase.
+function wordInfo(raw) {
+  const text = String(raw || '').trim();
+  const words = tokenize(text).filter((t) => !SKIP_WORDS.has(t.toLowerCase()) && !(PREPOSITIONS.has(t.toLowerCase()) && t === t.toLowerCase()));
+  if (tokenize(text).filter((t) => !SKIP_WORDS.has(t.toLowerCase())).length <= 1 && !findPhrases(text).length) return singleWordInfo(text);
+  const content = words.filter((t) => !BASIC_WORDS.has(t.toLowerCase()));
+  return {
+    kind: 'multi',
+    text,
+    phrases: findPhrases(text),
+    parts: (content.length ? content : words).map((t) => singleWordInfo(t)).filter((p) => p.kind !== 'unknown'),
+  };
 }
 
 // ---------- Plain-text output for the small model ----------
@@ -853,22 +903,33 @@ function formatSentence(sentence) {
   return lines.join('\n');
 }
 
-function formatWord(word) {
-  const w = wordInfo(word);
+function formatOne(w) {
   const sure = w.source === 'table' ? 'certain' : w.source === 'none' ? 'unknown' : 'rule-based, say "(check)"';
+  const lines = [];
+  if (w.did_you_mean) lines.push(`TYPO: the learner wrote "${w.typed}", they mean "${w.did_you_mean}". Say "Meintest du: ${w.did_you_mean}?" first.`);
   if (w.kind === 'verb') {
-    return [
+    lines.push(
       `VERB: ${w.infinitive} (${w.type}; ${sure})`,
       `er/sie: ${w.praesens_er} | Präteritum: ${w.praeteritum} | Partizip II: ${w.partizip2} | Perfekt: ${w.perfekt}`,
       `separable: ${w.separable === true ? `yes, prefix "${w.prefix}"` : w.separable === false ? 'no' : w.separable}`,
-      w.reflexive_meanings ? `with/without "sich": ${w.reflexive_meanings}` : null,
-      w.note ? `note: ${w.note}` : null,
-    ].filter(Boolean).join('\n');
+    );
+    if (w.reflexive_meanings) lines.push(`with/without "sich": ${w.reflexive_meanings}`);
+  } else if (w.kind === 'noun') {
+    lines.push(`NOUN: ${w.gender} ${w.noun} (${sure})`, `plural: ${w.plural}`);
+  } else {
+    lines.push(`UNKNOWN: ${w.word}`);
   }
-  if (w.kind === 'noun') {
-    return [`NOUN: ${w.gender} ${w.noun} (${sure})`, `plural: ${w.plural}`, w.note ? `note: ${w.note}` : null].filter(Boolean).join('\n');
-  }
-  return `UNKNOWN: ${w.note}`;
+  if (w.note) lines.push(`note: ${w.note}`);
+  return lines.join('\n');
 }
 
-export { PHRASE_EXAMPLES, verbInfo, nounInfo, wordInfo, findPhrases, analyzeSentence, formatSentence, formatWord, tokenize, VERBS, PHRASES };
+function formatWord(word) {
+  const w = wordInfo(word);
+  if (w.kind !== 'multi') return formatOne(w);
+  const lines = [`SEVERAL WORDS: "${w.text}"`];
+  if (w.phrases.length) w.phrases.forEach((p) => lines.push(`FIXED PHRASE: ${p.phrase} = ${p.meaning}${p.grammar ? ` (${p.grammar})` : ''}${p.example ? `. Beispiel: ${p.example[0]} (${p.example[1]})` : ''}`));
+  w.parts.forEach((part) => lines.push(formatOne(part)));
+  return lines.join('\n');
+}
+
+export { PHRASE_EXAMPLES, editDistance, closestKnown, verbInfo, nounInfo, wordInfo, findPhrases, analyzeSentence, formatSentence, formatWord, tokenize, VERBS, PHRASES };

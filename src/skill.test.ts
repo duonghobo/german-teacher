@@ -27,7 +27,7 @@ test('a correction overrides the tables next time and survives a reload', async 
 
   const again = await openMemory(store, T0 + DAY); // a new chat
   const out = handle({ action: 'word', word: 'Bahnhofsuhr' }, again, T0 + DAY).result;
-  assert.match(out, /^VERIFIED CORRECTIONS[\s\S]*die Bahnhofsuhr, plural die Bahnhofsuhren/);
+  assert.match(out, /\nVERIFIED CORRECTIONS[\s\S]*die Bahnhofsuhr, plural die Bahnhofsuhren/);
   const inSentence = handle({ action: 'analyze', sentence: 'Die Bahnhofsuhr ist kaputt.' }, again, T0 + DAY).result;
   assert.match(inSentence, /VERIFIED CORRECTIONS/);
 });
@@ -92,4 +92,14 @@ test('answers in German by default with examples; English on request; remembered
   const later = await openMemory(store, T0 + DAY);
   assert.match(handle({ action: 'analyze', sentence: 'Ich verstehe nur Bahnhof.' }, later, T0 + DAY).result, /ANSWER IN ENGLISH/);
   assert.match(handle({ action: 'settings', lang: 'de' }, later, T0).result, /Deutsch/);
+});
+
+test('tool output is framed as facts for the model, not as the answer', async () => {
+  const mem = await openMemory(createMapStore(), T0);
+  const out = handle({ action: 'word', word: 'Befriff haben' }, mem, T0).result;
+  assert.match(out, /^FAKTEN FÜR DICH \(dem Lernenden NICHT zeigen/);
+  assert.match(out, /Schreib jetzt DEINE EIGENE Antwort/);
+  assert.match(out, /Meintest du/);
+  handle({ action: 'settings', lang: 'en' }, mem, T0);
+  assert.match(handle({ action: 'word', word: 'Heimat' }, mem, T0).result, /^FACTS FOR YOU/);
 });
