@@ -1,0 +1,11 @@
+{
+  "name": "german-teacher",
+  "private": true,
+  "type": "module",
+  "description": "Offline German teacher skills for Google AI Edge Gallery. Zero dependencies; Node >= 22.18 runs .ts natively.",
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "build": "node src/build.ts",
+    "test": "node --test \"src/**/*.test.ts\""
+  }
+}
