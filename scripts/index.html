@@ -190,6 +190,374 @@ for (const line of VERB_ROWS.trim().split('\n')) {
   VERBS.set(inf, { inf, p3, prt, p2, aux });
 }
 
+
+// Short meanings (English) so the model doesn't have to guess them.
+const VERB_GLOSS = {
+"backen": "to bake",
+"befehlen": "to order, command",
+"beginnen": "to begin",
+"beißen": "to bite",
+"biegen": "to bend; to turn (a corner)",
+"bieten": "to offer",
+"binden": "to tie, bind",
+"bitten": "to ask (for), request",
+"blasen": "to blow",
+"bleiben": "to stay, remain",
+"braten": "to fry, roast",
+"brechen": "to break",
+"brennen": "to burn",
+"bringen": "to bring",
+"denken": "to think",
+"dringen": "to penetrate, urge",
+"dürfen": "may, to be allowed to",
+"empfehlen": "to recommend",
+"essen": "to eat",
+"fahren": "to drive, travel (by vehicle)",
+"fallen": "to fall",
+"fangen": "to catch",
+"finden": "to find; to think (an opinion)",
+"fliegen": "to fly",
+"fliehen": "to flee",
+"fließen": "to flow",
+"fressen": "to eat (animals)",
+"frieren": "to freeze, be cold",
+"geben": "to give",
+"gehen": "to go, walk",
+"gelingen": "to succeed (es gelingt mir)",
+"gelten": "to be valid, count as",
+"genießen": "to enjoy",
+"geschehen": "to happen",
+"gewinnen": "to win",
+"gießen": "to pour; to water",
+"gleichen": "to resemble",
+"gleiten": "to glide",
+"graben": "to dig",
+"greifen": "to grab, reach for",
+"haben": "to have",
+"halten": "to hold; to stop",
+"hängen": "to hang",
+"heben": "to lift",
+"heißen": "to be called; to mean",
+"helfen": "to help (+ Dat)",
+"kennen": "to know (be familiar with)",
+"klingen": "to sound",
+"kommen": "to come",
+"können": "can, to be able to",
+"kriechen": "to crawl",
+"laden": "to load",
+"lassen": "to let, leave; to have something done",
+"laufen": "to run, walk",
+"leiden": "to suffer",
+"leihen": "to lend, borrow",
+"lesen": "to read",
+"liegen": "to lie (be lying), be located",
+"lügen": "to lie (tell lies)",
+"meiden": "to avoid",
+"messen": "to measure",
+"mögen": "to like",
+"müssen": "must, to have to",
+"nehmen": "to take",
+"nennen": "to name, call",
+"pfeifen": "to whistle",
+"raten": "to advise; to guess",
+"reiben": "to rub",
+"reißen": "to tear",
+"reiten": "to ride (a horse)",
+"rennen": "to run",
+"riechen": "to smell",
+"rufen": "to call",
+"scheiden": "to separate; to divorce",
+"scheinen": "to shine; to seem",
+"schieben": "to push",
+"schießen": "to shoot",
+"schlafen": "to sleep",
+"schlagen": "to hit, beat",
+"schleichen": "to sneak",
+"schließen": "to close; to conclude",
+"schmeißen": "to chuck, throw",
+"schmelzen": "to melt",
+"schneiden": "to cut",
+"schreiben": "to write",
+"schreien": "to scream",
+"schweigen": "to be silent",
+"schwimmen": "to swim",
+"schwören": "to swear",
+"sehen": "to see",
+"sein": "to be",
+"singen": "to sing",
+"sinken": "to sink",
+"sitzen": "to sit",
+"sollen": "should, to be supposed to",
+"sprechen": "to speak",
+"springen": "to jump",
+"stechen": "to sting, prick",
+"stehen": "to stand",
+"stehlen": "to steal",
+"steigen": "to climb, rise",
+"sterben": "to die",
+"stinken": "to stink",
+"stoßen": "to push, bump",
+"streichen": "to paint; to spread; to cross out",
+"streiten": "to argue",
+"tragen": "to carry; to wear",
+"treffen": "to meet; to hit",
+"treiben": "to drive; to do (sport)",
+"treten": "to step; to kick",
+"trinken": "to drink",
+"tun": "to do",
+"verderben": "to spoil",
+"vergessen": "to forget",
+"verlieren": "to lose",
+"verschwinden": "to disappear",
+"verzeihen": "to forgive",
+"wachsen": "to grow",
+"waschen": "to wash",
+"weichen": "to give way",
+"weisen": "to point, show",
+"werben": "to advertise; to recruit",
+"werden": "to become; (+ infinitive) will",
+"werfen": "to throw",
+"wiegen": "to weigh",
+"wissen": "to know (a fact)",
+"wollen": "to want",
+"ziehen": "to pull; to move (house)",
+"zwingen": "to force",
+"bekommen": "to get, receive",
+"verstehen": "to understand",
+"entscheiden": "to decide",
+"erfahren": "to find out; to experience",
+"gefallen": "to please (es gefällt mir = I like it)",
+"entstehen": "to arise, come into being",
+"erscheinen": "to appear; to be published",
+"unterscheiden": "to distinguish",
+"unterhalten": "to entertain; (sich) to talk",
+"einschlafen": "to fall asleep",
+"aufstehen": "to get up, stand up",
+"begreifen": "to understand, grasp",
+"ergreifen": "to seize, take (an opportunity)",
+"angreifen": "to attack",
+"ankommen": "to arrive",
+"anfangen": "to begin, start",
+"anrufen": "to call (phone)",
+"aussehen": "to look (like)",
+"einladen": "to invite",
+"vorschlagen": "to suggest",
+"teilnehmen": "to take part",
+"mitnehmen": "to take along",
+"abfahren": "to depart",
+"aufgeben": "to give up",
+"ausgeben": "to spend (money)",
+"annehmen": "to accept; to assume",
+"vorlesen": "to read aloud",
+"verlassen": "to leave, abandon; (sich auf) to rely on",
+"erhalten": "to receive",
+"enthalten": "to contain",
+"behalten": "to keep",
+"verbieten": "to forbid",
+"versprechen": "to promise",
+"besprechen": "to discuss",
+"beschreiben": "to describe",
+"unterschreiben": "to sign",
+"vergleichen": "to compare",
+"beweisen": "to prove",
+"bestehen": "to pass (an exam); (aus) to consist of; (auf) to insist on",
+"zurückkommen": "to come back",
+"vorkommen": "to occur; to seem",
+"anziehen": "to put on (clothes); to attract",
+"ausziehen": "to take off (clothes); to move out",
+"umziehen": "to move (house)",
+"erziehen": "to bring up, educate",
+"beziehen": "to obtain; (sich auf) to refer to",
+"verbringen": "to spend (time)",
+"entwerfen": "to design, draft",
+"zurückgehen": "to go back",
+"machen": "to make, do",
+"lernen": "to learn",
+"arbeiten": "to work",
+"wohnen": "to live (reside)",
+"leben": "to live",
+"sagen": "to say",
+"fragen": "to ask",
+"antworten": "to answer",
+"spielen": "to play",
+"kaufen": "to buy",
+"brauchen": "to need",
+"glauben": "to believe",
+"hoffen": "to hope",
+"warten": "to wait",
+"freuen": "(sich) to be glad",
+"erinnern": "to remind; (sich) to remember",
+"vorstellen": "to introduce; (sich etwas) to imagine",
+"hören": "to hear, listen",
+"zeigen": "to show",
+"erklären": "to explain",
+"bedeuten": "to mean",
+"fühlen": "to feel",
+"handeln": "to act; to trade; (von) to be about",
+"sehnen": "(sich nach) to long for",
+"suchen": "to look for",
+"legen": "to lay, put (flat)",
+"stellen": "to put (upright)",
+"setzen": "to set, put; (sich) to sit down",
+"reisen": "to travel",
+"wandern": "to hike",
+"folgen": "to follow",
+"öffnen": "to open",
+"studieren": "to study (at university)",
+"vermissen": "to miss (someone)",
+"kennenlernen": "to get to know",
+"erzählen": "to tell (a story)",
+"verändern": "to change",
+"gehören": "to belong",
+"träumen": "to dream"
+};
+const NOUN_GLOSS = {
+"heimat": "home, homeland; the place where you feel you belong",
+"heimweh": "homesickness",
+"heimatland": "home country",
+"zuhause": "home",
+"herkunft": "origin, background",
+"sehnsucht": "longing, yearning",
+"fremde": "foreign parts (in der Fremde = far from home)",
+"ausland": "abroad, foreign countries",
+"ausländer": "foreigner",
+"muttersprache": "mother tongue",
+"wurzel": "root",
+"grenze": "border; limit",
+"satz": "sentence; (also) leap, set",
+"begriff": "term, concept, notion",
+"wort": "word",
+"text": "text",
+"kapitel": "chapter",
+"thema": "topic",
+"bedeutung": "meaning; importance",
+"frage": "question",
+"antwort": "answer",
+"sprache": "language",
+"buch": "book",
+"geschichte": "story; history",
+"erinnerung": "memory; reminder",
+"kindheit": "childhood",
+"erfahrung": "experience",
+"gefühl": "feeling",
+"meinung": "opinion",
+"idee": "idea",
+"sinn": "sense, meaning",
+"grund": "reason; ground",
+"unterschied": "difference",
+"möglichkeit": "possibility",
+"beispiel": "example",
+"problem": "problem",
+"ding": "thing",
+"teil": "part",
+"fall": "case; fall",
+"seite": "side; page",
+"mal": "time (one time, two times)",
+"ziel": "goal; destination",
+"weg": "way, path",
+"ort": "place",
+"raum": "room; space",
+"zimmer": "room",
+"haus": "house",
+"wohnung": "apartment",
+"tür": "door",
+"fenster": "window",
+"tisch": "table",
+"stuhl": "chair",
+"bett": "bed",
+"straße": "street",
+"stadt": "city, town",
+"dorf": "village",
+"land": "country; land",
+"welt": "world",
+"erde": "earth",
+"himmel": "sky; heaven",
+"sonne": "sun",
+"mond": "moon",
+"luft": "air",
+"wasser": "water",
+"feuer": "fire",
+"meer": "sea",
+"fluss": "river",
+"berg": "mountain",
+"baum": "tree",
+"tier": "animal",
+"hund": "dog",
+"katze": "cat",
+"zug": "train",
+"bahnhof": "(train) station",
+"auto": "car",
+"reise": "trip, journey",
+"mensch": "person, human being",
+"leute": "people",
+"eltern": "parents",
+"mann": "man; husband",
+"frau": "woman; wife; Mrs",
+"kind": "child",
+"mutter": "mother",
+"vater": "father",
+"bruder": "brother",
+"schwester": "sister",
+"familie": "family",
+"freund": "friend; boyfriend",
+"nachbar": "neighbour",
+"name": "name",
+"volk": "people, nation",
+"gesellschaft": "society; company",
+"kultur": "culture",
+"gott": "god",
+"hand": "hand",
+"kopf": "head",
+"auge": "eye",
+"herz": "heart",
+"gesicht": "face",
+"leben": "life",
+"tod": "death",
+"zeit": "time",
+"tag": "day",
+"nacht": "night",
+"morgen": "morning",
+"abend": "evening",
+"woche": "week",
+"monat": "month",
+"jahr": "year",
+"stunde": "hour; lesson",
+"minute": "minute",
+"moment": "moment",
+"anfang": "beginning",
+"ende": "end",
+"zukunft": "future",
+"vergangenheit": "past",
+"gegenwart": "present",
+"arbeit": "work, job",
+"schule": "school",
+"firma": "company",
+"stelle": "position, job; place",
+"geld": "money",
+"recht": "right; law",
+"kraft": "strength, power",
+"macht": "power",
+"krieg": "war",
+"frieden": "peace",
+"essen": "food, meal",
+"brot": "bread",
+"bild": "picture",
+"lied": "song",
+"musik": "music",
+"spiel": "game",
+"uhr": "clock, watch; o'clock",
+"kurs": "course",
+"deutsch": "German (language)",
+"zeitung": "newspaper",
+"brief": "letter",
+"gedanke": "thought",
+"gedicht": "poem",
+"roman": "novel",
+"junge": "boy",
+"käse": "cheese",
+"mädchen": "girl"
+};
+
 const AUX_TEXT = { h: 'haben', s: 'sein', hs: 'sein (movement / change of state) or haben (with an object)' };
 
 function stemOf(inf) {
@@ -290,6 +658,7 @@ function verbInfo(rawInf) {
     perfekt: `er/sie ${row.aux === 's' ? 'ist' : row.aux === 'h' ? 'hat' : 'ist/hat'} ${row.p2}`,
     auxiliary: auxWord,
     reflexive_meanings: REFLEXIVE_NOTES[base] || REFLEXIVE_NOTES[inf] || null,
+    meaning: VERB_GLOSS[inf] || null,
     source,
     note: note || null,
   };
@@ -339,6 +708,27 @@ for (const inf of VERBS.keys()) {
   FORM_INDEX.set(VERBS.get(inf).p2, { inf, kind: 'partizip2' });
 }
 for (const f of ['sein', 'seine', 'seinen', 'seinem', 'seiner', 'seines', 'die', 'den', 'dem']) FORM_INDEX.delete(f);
+
+// Partizip II of table verbs, for prefixed forms (begriffen = be + (ge)griffen).
+const P2_INDEX = new Map();
+for (const v of VERBS.values()) if (!v.p3.includes(' ')) P2_INDEX.set(v.p2, v.inf);
+
+// A form of a prefixed verb whose base is in the table: begriffen → begreifen, angekommen → ankommen, verstand → verstehen.
+function resolvePrefixed(lower) {
+  const prefixes = [...INSEPARABLE, ...AMBIGUOUS, ...SEPARABLE].sort((a, b) => b.length - a.length);
+  for (const p of prefixes) {
+    if (!lower.startsWith(p) || lower.length < p.length + 3) continue;
+    let rest = lower.slice(p.length);
+    const separable = SEPARABLE.includes(p);
+    if (separable && rest.startsWith('zu') && VERBS.has(rest.slice(2))) return { inf: p + rest.slice(2), kind: 'zu-infinitive' };
+    if (VERBS.has(rest) && !VERBS.get(rest).p3.includes(' ')) return { inf: p + rest, kind: 'infinitive' };
+    if (separable && P2_INDEX.has(rest)) return { inf: p + P2_INDEX.get(rest), kind: 'partizip2' };
+    if (!separable && P2_INDEX.has('ge' + rest)) return { inf: p + P2_INDEX.get('ge' + rest), kind: 'partizip2' };
+    const hit = FORM_INDEX.get(rest);
+    if (hit && hit.kind === 'finite') return { inf: p + hit.inf, kind: 'finite' };
+  }
+  return null;
+}
 
 // ---------- Nouns ----------
 // word|gender|plural ("-" = no plural in normal use)
@@ -511,7 +901,7 @@ function nounInfo(raw) {
   const word = raw.trim().replace(/^(der|die|das)\s+/i, '');
   const key = word.toLowerCase();
   const hit = NOUNS.get(key);
-  if (hit) return { noun: hit.word, gender: hit.gender, plural: hit.plural, source: 'table' };
+  if (hit) return { noun: hit.word, gender: hit.gender, plural: hit.plural, source: 'table', meaning: NOUN_GLOSS[key] || null };
   // Compound noun: the last part decides the gender.
   for (let i = 1; i < key.length - 2; i++) {
     const tail = key.slice(i);
@@ -519,7 +909,7 @@ function nounInfo(raw) {
     if (head) {
       const first = word.slice(0, i);
       const plural = head.plural.startsWith('no plural') ? head.plural : first + head.plural.toLowerCase();
-      return { noun: word, gender: head.gender, plural, source: 'compound', note: `Compound: the last part "${head.word}" decides the gender.` };
+      return { noun: word, gender: head.gender, plural, source: 'compound', meaning: NOUN_GLOSS[tail] ? `(last part: ${NOUN_GLOSS[tail]})` : null, note: `Compound: the last part "${head.word}" decides the gender.` };
     }
   }
   if (/en$/.test(key) && word[0] === word[0].toUpperCase()) {
@@ -811,11 +1201,8 @@ function analyzeSentence(sentence) {
     let hit = FORM_INDEX.get(low);
     let inf = hit && hit.inf;
     if (!hit && /^[a-zäöü]/.test(t)) {
-      for (const p of SEPARABLE) {
-        const rest = low.startsWith(p) ? low.slice(p.length).replace(/^zu(?=[a-zäöü]{3})/, '') : '';
-        const h = rest && FORM_INDEX.get(rest);
-        if (h && rest.length >= 3) { hit = h; inf = p + h.inf; break; }
-      }
+      const pre = resolvePrefixed(low);
+      if (pre) { hit = { inf: pre.inf, kind: pre.kind }; inf = pre.inf; }
     }
     if (hit && !seen.has(inf)) {
       seen.add(inf);
@@ -867,6 +1254,8 @@ function singleWordInfo(raw) {
     if (VERBS.has(lower)) return { kind: 'verb', ...verbInfo(lower) };
     const hit = FORM_INDEX.get(lower);
     if (hit) return { kind: 'verb', form_given: w, ...verbInfo(hit.inf) };
+    const pre = resolvePrefixed(lower);
+    if (pre) return { kind: 'verb', form_given: w, form_kind: pre.kind, ...verbInfo(pre.inf) };
     const near = closestKnown(lower);
     if (near && near.dist === 1) return { did_you_mean: near.word, typed: w, ...singleWordInfo(near.kind === 'noun' ? near.word : near.word) };
     if (/(en|ern|eln|n)$/.test(lower)) return { kind: 'verb', ...verbInfo(lower) };
@@ -927,8 +1316,11 @@ function formatOne(w) {
       `separable: ${w.separable === true ? `yes, prefix "${w.prefix}"` : w.separable === false ? 'no' : w.separable}`,
     );
     if (w.reflexive_meanings) lines.push(`with/without "sich": ${w.reflexive_meanings}`);
+    if (w.form_given && w.form_given.toLowerCase() !== w.infinitive) lines.push(`"${w.form_given}" is a form of "${w.infinitive}"${w.form_kind === 'partizip2' ? ' (Partizip II, used in the Perfekt: hat/ist + Partizip II)' : ''}`);
+    lines.push(w.meaning ? `meaning: ${w.meaning}` : 'meaning: not in the tables, give it from your own knowledge');
   } else if (w.kind === 'noun') {
     lines.push(`NOUN: ${w.gender} ${w.noun} (${sure})`, `plural: ${w.plural}`);
+    lines.push(w.meaning ? `meaning: ${w.meaning}` : 'meaning: not in the tables, give it from your own knowledge');
     const key = String(w.noun).toLowerCase();
     PHRASES.filter((p) => p.groups.some((g) => g.words && g.words.has(key))).forEach((p) => {
       const ex = PHRASE_EXAMPLES[p.phrase];
@@ -1180,7 +1572,7 @@ Grammatikbegriffe auf Deutsch (Präsens, Akkusativ, Nebensatz). Nichts davor, ni
 - Wenn oben TYPO steht: beginne mit "Meintest du: ...?".
 - Wenn oben FIXED PHRASE steht: erkläre zuerst den Ausdruck, mit dem Beispiel vom Tool.
 - FORMEN: genau wie vom Tool, nichts ändern.
-- BEDEUTUNGEN: nummeriert; jede Bedeutung auf Deutsch erklärt, dann (English: ...).
+- BEDEUTUNGEN: nummeriert; nimm die "meaning"-Zeile vom Tool. Steht dort "not in the tables", gib die Bedeutung aus deinem Wissen (bei Zweifel: "(unsicher)"). Jede Bedeutung auf Deutsch erklärt, dann (English: ...).
 - BEISPIELE: 3 kurze Sätze, ein Satz pro Bedeutung, jeder mit (English: ...).{saved}
 - MIT/OHNE "SICH": nur wenn das Tool es angibt.`,
   },
@@ -1197,7 +1589,7 @@ Nothing before or after.`,
 - If TYPO appears above: start with "Did you mean: ...?".
 - If FIXED PHRASE appears above: explain the phrase first, with the tool's example.
 - FORMS: exactly as the tool gives them.
-- MEANINGS: numbered, each explained.
+- MEANINGS: numbered; use the tool's "meaning" line. If it says "not in the tables", give the meaning from your own knowledge (mark "(unsure)" if in doubt).
 - EXAMPLES: 3 short German sentences, one per meaning, each with its English translation.{saved}
 - WITH/WITHOUT "SICH": only if the tool gives it.`,
   },

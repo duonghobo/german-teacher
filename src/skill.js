@@ -22,7 +22,7 @@ Grammatikbegriffe auf Deutsch (Präsens, Akkusativ, Nebensatz). Nichts davor, ni
 - Wenn oben TYPO steht: beginne mit "Meintest du: ...?".
 - Wenn oben FIXED PHRASE steht: erkläre zuerst den Ausdruck, mit dem Beispiel vom Tool.
 - FORMEN: genau wie vom Tool, nichts ändern.
-- BEDEUTUNGEN: nummeriert; jede Bedeutung auf Deutsch erklärt, dann (English: ...).
+- BEDEUTUNGEN: nummeriert; nimm die "meaning"-Zeile vom Tool. Steht dort "not in the tables", gib die Bedeutung aus deinem Wissen (bei Zweifel: "(unsicher)"). Jede Bedeutung auf Deutsch erklärt, dann (English: ...).
 - BEISPIELE: 3 kurze Sätze, ein Satz pro Bedeutung, jeder mit (English: ...).{saved}
 - MIT/OHNE "SICH": nur wenn das Tool es angibt.`,
   },
@@ -39,7 +39,7 @@ Nothing before or after.`,
 - If TYPO appears above: start with "Did you mean: ...?".
 - If FIXED PHRASE appears above: explain the phrase first, with the tool's example.
 - FORMS: exactly as the tool gives them.
-- MEANINGS: numbered, each explained.
+- MEANINGS: numbered; use the tool's "meaning" line. If it says "not in the tables", give the meaning from your own knowledge (mark "(unsure)" if in doubt).
 - EXAMPLES: 3 short German sentences, one per meaning, each with its English translation.{saved}
 - WITH/WITHOUT "SICH": only if the tool gives it.`,
   },

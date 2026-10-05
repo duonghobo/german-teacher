@@ -79,6 +79,7 @@ For a photo: read the German sentence that is underlined, circled or highlighted
 - After "analyze" and "word": follow the format block at the end of the tool output exactly (ANTWORTE AUF DEUTSCH / ANSWER IN ENGLISH). It always includes examples.
 - After "quiz": ask one item at a time, wait for the answer, then call "review".
 - After "export": show the export block exactly as returned.
+- If the tool gives no meaning, give it from your own knowledge. Never refuse to explain a word.
 - If you are not sure about something the tool did not give you, write "(unsicher)" / "(unsure)".
 `;
 

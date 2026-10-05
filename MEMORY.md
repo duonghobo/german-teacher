@@ -57,6 +57,9 @@ Patterns learned the hard way. Each one has a test.
 
 6. A noun lookup should surface the idioms built on that noun (*Begriff* → *im Begriff sein*, *ein Begriff sein*, *schwer von Begriff sein*). Learners often ask about a noun when they really met an idiom. Idiom patterns need their article (*einen/keinen Begriff haben*) so ordinary sentences with "Begriff … haben" don't match. (v2.3)
 
+7. Learners meet inflected forms of prefixed verbs (*begriffen*, *angekommen*, *verstand*). Resolve prefix + table base (inseparable Partizip II = prefix + base Partizip II without ge-) before falling back to regular rules, or a strong verb gets called regular. (v2.4)
+8. Facts without meanings make the model refuse ("meaning not provided by the tool"). Ship short meanings for table words, and say explicitly that the model may give a meaning from its own knowledge when the tables have none. (v2.4)
+
 ## Open questions
 - Does the iOS app support "Import local skill" from a Files folder? (second-brain's README says yes for iOS 17+.)
 - Does memory survive closing the app, and re-importing a new version? First on-device test.
@@ -78,3 +81,4 @@ Patterns learned the hard way. Each one has a test.
 - 2026-10-05: v2.2. First on-device run of v2.1: the skill ran (German format visible), but "Befriff haben" came back as one unknown noun and Gemma echoed the tool output. Added typo correction, multi-word lookup, and facts-vs-answer framing. Rules 4–5.
 - 2026-10-05: Model search. No small German *tutor* model exists; langlm-de added as the writing checker in PocketPal (docs/langlm.md). Reading stays with Gemma + skill.
 - 2026-10-05: v2.3. "Begriff haben" asked on device (and to Siri, which failed). Added 4 Begriff idioms with examples; noun lookups now list idioms containing the noun. Rule 6.
+- 2026-10-05: v2.4. On device, "begriffen haben" was called a regular verb and Gemma refused to give a meaning. Added prefixed-form resolution (begriffen → begreifen) and short English meanings for ~190 verbs and ~170 nouns. Rules 7–8. 21 tests.

@@ -47,7 +47,7 @@ fix: / check:  ──► memory on the device ──► export ──► evoluti
 
 ## Develop
 ```
-npm test        # 19 tests: grammar facts, memory, and the built page run like Edge Gallery calls it
+npm test        # 21 tests: grammar facts, memory, and the built page run like Edge Gallery calls it
 npm run build   # regenerates SKILL.md and scripts/index.html from src/
 ```
 | File | Role |

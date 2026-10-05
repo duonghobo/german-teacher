@@ -127,3 +127,24 @@ test('looking up a noun lists the fixed phrases built with it', () => {
   assert.match(formatWord('Heimweh'), /Heimweh haben/);
   assert.deepEqual(phraseNames('Ich denke, die neuen Wörter haben mit dem Begriff Heimat zu tun.'), ['mit etwas zu tun haben']);
 });
+
+test('forms of prefixed verbs are recognised (begriffen → begreifen)', () => {
+  const b = wordInfo('begriffen');
+  assert.equal(b.infinitive, 'begreifen');
+  assert.equal(b.praeteritum, 'begriff');
+  assert.equal(b.partizip2, 'begriffen');
+  assert.equal(b.auxiliary, 'haben');
+  assert.match(b.meaning, /understand/);
+  assert.equal(wordInfo('angekommen').infinitive, 'ankommen');
+  assert.equal(wordInfo('verstand').infinitive, 'verstehen');
+  const out = formatWord('begriffen haben');
+  assert.match(out, /"begriffen" is a form of "begreifen" \(Partizip II/);
+  assert.match(out, /meaning: to understand, grasp/);
+  assert.ok(analyzeSentence('Ich habe es endlich begriffen.').irregular_verbs.some((v) => v.infinitive === 'begreifen'));
+});
+
+test('meanings come from the tables, with an honest fallback', () => {
+  assert.match(formatWord('Heimat'), /meaning: home, homeland/);
+  assert.match(formatWord('tun'), /meaning: to do/);
+  assert.match(formatWord('Xyzabc'), /meaning: not in the tables/);
+});
