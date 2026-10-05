@@ -7,7 +7,7 @@ const DAY = 24 * 60 * 60 * 1000;
 const BOX_DAYS = [0, 1, 3, 7, 14, 30]; // Leitner boxes 1..5
 
 function emptyMemory() {
-  return { v: 1, vocab: {}, corrections: {}, mistakes: [], lastExport: 0 };
+  return { v: 1, vocab: {}, corrections: {}, mistakes: [], lastExport: 0, prefs: { lang: 'de' } };
 }
 
 function memKey(text) {
@@ -82,7 +82,7 @@ async function openMemory(store, now = Date.now()) {
   let data = emptyMemory();
   try {
     const text = await store.load();
-    if (text) data = { ...emptyMemory(), ...JSON.parse(text) };
+    if (text) { const saved = JSON.parse(text); data = { ...emptyMemory(), ...saved, prefs: { ...emptyMemory().prefs, ...(saved.prefs || {}) } }; }
   } catch (e) { data = emptyMemory(); }
   return {
     data,
@@ -183,6 +183,12 @@ function stats(mem, now = Date.now()) {
   ].join('\n');
 }
 
+function setLanguage(mem, lang) {
+  const l = /^(en|english|englisch)/i.test(String(lang || '')) ? 'en' : 'de';
+  mem.data.prefs.lang = l;
+  return l === 'de' ? 'Ab jetzt antworte ich auf Deutsch (einfaches Deutsch, B1).' : 'From now on I answer in English.';
+}
+
 // Lines for the repo's evolution/ files; marks them exported.
 function exportNew(mem, now = Date.now()) {
   const day = new Date(now).toISOString().slice(0, 10);
@@ -201,5 +207,5 @@ function exportNew(mem, now = Date.now()) {
 
 export {
   MEMORY_KEY, emptyMemory, memKey, createMapStore, createBrowserStore, openMemory,
-  saveWord, addCorrection, addMistake, correctionsFor, savedIn, dueItems, quiz, review, recall, stats, exportNew,
+  setLanguage, saveWord, addCorrection, addMistake, correctionsFor, savedIn, dueItems, quiz, review, recall, stats, exportNew,
 };

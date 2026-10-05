@@ -25,6 +25,7 @@ What this project is for, what was decided and why, and what was learned. Read t
 8. **Two-layer memory** (v2), modelled on uussnn/second-brain but without its unworkable part (a sandboxed skill cannot rewrite its own SKILL.md):
    - *On the device*: localStorage mirrored to IndexedDB inside the skill. Saved words (Leitner review 1/3/7/14/30 days), verified corrections (`fix:`) that override the tables, the learner's mistakes (`check:`). Instant and offline.
    - *In the repo*: `export` → `evolution/*.jsonl` → table rows + tests + Discovered rules → new release. Permanent and tested.
+9. **German by default, examples always** (v2.1). The learner wants to be taught in German. Every analyze/word result ends with the answer format in the current language (ANTWORTE AUF DEUTSCH / ANSWER IN ENGLISH), so the format sits right next to the facts and an old pasted prompt can't override it. Every fixed phrase carries a checked example; word answers ask for 3 examples, and the learner's own book sentence comes first if the word was saved. `settings` switches the language and is remembered.
 
 ## What failed (keep these as regression cases)
 | Version | Failure |
@@ -48,6 +49,7 @@ Lesson: a small on-device model can't hold many jobs in one answer and can't be 
 Patterns learned the hard way. Each one has a test.
 1. A main clause can end in "zu + infinitive" (*Das hat mit mir zu tun.*): only call it an infinitive clause after a comma. (v2)
 2. A saved phrase rarely appears word for word (*mit etwas zu tun haben* → *hat mit mir zu tun*): match saved items through the fixed-phrase finder, not only by words. (v2)
+3. A clause after a comma that ends in "zu + infinitive" is only an infinitive clause if it has no conjugated verb of its own (*Ich denke, die Wörter haben … zu tun* is a main clause) or starts with um/ohne/(an)statt. (v2.1)
 
 ## Open questions
 - Does the iOS app support "Import local skill" from a Files folder? (second-brain's README says yes for iOS 17+.)
@@ -66,3 +68,4 @@ Patterns learned the hard way. Each one has a test.
 ## Log
 - 2026-10-05: Interviewed the learner. Setup: Split View + prompt. Prompts v1–v3 tried and failed as described above. Built skills v1 (2 skills, 9 tests). Published this repo.
 - 2026-10-05: v2. Merged into one skill with on-device memory (save, fix, mistake, quiz/review, recall, stats, export) and the evolution/ loop. Repo root is the skill (ZIP → import folder). 13 tests.
+- 2026-10-05: v2.1. First on-device output came from the old pasted prompt (7 sections, "haben" as a new word, invented meaning), so the format now travels inside every tool result. German answers by default, `settings` for English, 80 checked phrase examples, 3 examples per word. Fixed rule 3. 15 tests.

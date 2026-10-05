@@ -618,6 +618,90 @@ const PHRASES = [
   groups: pattern.split(' + ').map((g) => g.startsWith('V:') ? { verb: g.slice(2) } : { words: new Set(g.split('|')) }),
 }));
 
+// One checked example per phrase: [German, English]. A test makes sure each example is found by its own pattern.
+const PHRASE_EXAMPLES = {
+  'mit etwas zu tun haben': ['Das hat nichts mit dir zu tun.', 'That has nothing to do with you.'],
+  'es geht um': ['In dem Buch geht es um Heimat.', 'The book is about home.'],
+  'es handelt sich um': ['Es handelt sich um ein Missverständnis.', 'It is a misunderstanding.'],
+  'von etwas handeln': ['Der Roman handelt von einer Familie.', 'The novel is about a family.'],
+  'es gibt': ['Es gibt hier keinen Bahnhof.', 'There is no station here.'],
+  'es kommt auf ... an': ['Es kommt auf das Wetter an.', 'It depends on the weather.'],
+  'sich freuen auf': ['Ich freue mich auf das Wochenende.', 'I am looking forward to the weekend.'],
+  'sich freuen über': ['Sie freut sich über das Geschenk.', 'She is happy about the present.'],
+  'warten auf': ['Wir warten auf den Zug.', 'We are waiting for the train.'],
+  'denken an': ['Ich denke oft an meine Familie.', 'I often think of my family.'],
+  'sich erinnern an': ['Erinnerst du dich an unsere Kindheit?', 'Do you remember our childhood?'],
+  'sich interessieren für': ['Er interessiert sich für Geschichte.', 'He is interested in history.'],
+  'sich kümmern um': ['Sie kümmert sich um ihre Mutter.', 'She takes care of her mother.'],
+  'Angst haben vor': ['Das Kind hat Angst vor dem Hund.', 'The child is afraid of the dog.'],
+  'sich fürchten vor': ['Viele fürchten sich vor der Zukunft.', 'Many people are afraid of the future.'],
+  'teilnehmen an': ['Ich nehme an dem Kurs teil.', 'I am taking part in the course.'],
+  'abhängen von': ['Das hängt vom Preis ab.', 'That depends on the price.'],
+  'bestehen aus': ['Das Team besteht aus fünf Personen.', 'The team consists of five people.'],
+  'sich beschäftigen mit': ['Ich beschäftige mich mit deutscher Literatur.', 'I am studying German literature.'],
+  'sich beschweren über': ['Er beschwert sich über den Lärm.', 'He complains about the noise.'],
+  'bitten um': ['Darf ich Sie um Hilfe bitten?', 'May I ask you for help?'],
+  'glauben an': ['Sie glaubt an eine bessere Zukunft.', 'She believes in a better future.'],
+  'sich gewöhnen an': ['Ich habe mich an das Wetter gewöhnt.', 'I have got used to the weather.'],
+  'hoffen auf': ['Wir hoffen auf gutes Wetter.', 'We are hoping for good weather.'],
+  'sich verlassen auf': ['Du kannst dich auf mich verlassen.', 'You can rely on me.'],
+  'sich vorbereiten auf': ['Ich bereite mich auf die Prüfung vor.', 'I am preparing for the exam.'],
+  'achten auf': ['Achte auf die Aussprache!', 'Pay attention to the pronunciation!'],
+  'sich entscheiden für': ['Sie hat sich für das rote Kleid entschieden.', 'She chose the red dress.'],
+  'erzählen von': ['Er erzählt von seiner Heimat.', 'He talks about his home country.'],
+  'fragen nach': ['Sie fragt nach dem Weg.', 'She asks for the way.'],
+  'gehören zu': ['Das gehört zu meinen Aufgaben.', 'That is part of my tasks.'],
+  'leiden unter': ['Viele leiden unter Heimweh.', 'Many people suffer from homesickness.'],
+  'nachdenken über': ['Ich denke über deine Frage nach.', 'I am thinking about your question.'],
+  'sich sehnen nach': ['Er sehnt sich nach seiner Heimat.', 'He longs for his home.'],
+  'sorgen für': ['Die Eltern sorgen für ihre Kinder.', 'The parents look after their children.'],
+  'träumen von': ['Sie träumt von einer Reise nach Japan.', 'She dreams of a trip to Japan.'],
+  'sich unterhalten über': ['Wir unterhalten uns über das Buch.', 'We are talking about the book.'],
+  'sich verabschieden von': ['Ich verabschiede mich von meinen Freunden.', 'I say goodbye to my friends.'],
+  'verzichten auf': ['Ich verzichte heute auf Zucker.', 'I am doing without sugar today.'],
+  'zweifeln an': ['Er zweifelt an seiner Entscheidung.', 'He doubts his decision.'],
+  'sich ärgern über': ['Ich ärgere mich über den Fehler.', 'I am annoyed about the mistake.'],
+  'Lust haben auf': ['Hast du Lust auf einen Kaffee?', 'Do you feel like a coffee?'],
+  'Wert legen auf': ['Sie legt großen Wert auf Pünktlichkeit.', 'She attaches great importance to punctuality.'],
+  'eine Rolle spielen': ['Das Geld spielt keine Rolle.', 'Money does not matter.'],
+  'in Frage kommen': ['Das kommt nicht in Frage.', 'That is out of the question.'],
+  'zur Verfügung stehen': ['Ich stehe Ihnen gern zur Verfügung.', 'I am happy to help you.'],
+  'in Kauf nehmen': ['Wir nehmen die lange Reise in Kauf.', 'We accept the long journey.'],
+  'zum Ausdruck bringen': ['Das Gedicht bringt die Sehnsucht zum Ausdruck.', 'The poem expresses the longing.'],
+  'in Anspruch nehmen': ['Das nimmt viel Zeit in Anspruch.', 'That takes up a lot of time.'],
+  'Recht haben': ['Du hast recht.', 'You are right.'],
+  'sich Mühe geben': ['Er gibt sich viel Mühe.', 'He makes a big effort.'],
+  'ums Leben kommen': ['Bei dem Unfall kam niemand ums Leben.', 'Nobody died in the accident.'],
+  'jemandem schwer/leicht fallen': ['Deutsch fällt mir nicht leicht.', 'German is not easy for me.'],
+  'zu Hause': ['Ich bin heute zu Hause.', 'I am at home today.'],
+  'nach Hause': ['Ich gehe jetzt nach Hause.', 'I am going home now.'],
+  'sich zu Hause fühlen': ['In Berlin fühle ich mich zu Hause.', 'I feel at home in Berlin.'],
+  'sich fremd fühlen': ['Am Anfang fühlte sie sich fremd.', 'At first she felt like a stranger.'],
+  'Heimweh haben': ['Im Winter habe ich oft Heimweh.', 'In winter I am often homesick.'],
+  'Wurzeln schlagen': ['Nach zehn Jahren hat er hier Wurzeln geschlagen.', 'After ten years he has put down roots here.'],
+  'nur Bahnhof verstehen': ['Bei Physik verstehe ich nur Bahnhof.', 'Physics is all Greek to me.'],
+  'die Daumen drücken': ['Ich drücke dir die Daumen!', 'I will keep my fingers crossed for you!'],
+  'den Nagel auf den Kopf treffen': ['Mit diesem Satz hast du den Nagel auf den Kopf getroffen.', 'With that sentence you hit the nail on the head.'],
+  'um den heißen Brei reden': ['Red nicht um den heißen Brei!', 'Stop beating around the bush!'],
+  'die Nase voll haben': ['Ich habe die Nase voll vom Regen.', 'I am fed up with the rain.'],
+  'auf dem Holzweg sein': ['Da bist du auf dem Holzweg.', 'You are on the wrong track there.'],
+  'ins Fettnäpfchen treten': ['Mit der Frage bin ich ins Fettnäpfchen getreten.', 'I put my foot in it with that question.'],
+  'unter vier Augen': ['Können wir unter vier Augen sprechen?', 'Can we talk in private?'],
+  'zwei Fliegen mit einer Klappe schlagen': ['So schlagen wir zwei Fliegen mit einer Klappe.', 'That way we kill two birds with one stone.'],
+  'Das ist nicht mein Bier': ['Wie er das macht, ist nicht mein Bier.', 'How he does it is not my problem.'],
+  'sowohl ... als auch': ['Sie spricht sowohl Deutsch als auch Englisch.', 'She speaks both German and English.'],
+  'weder ... noch': ['Ich habe weder Zeit noch Geld.', 'I have neither time nor money.'],
+  'entweder ... oder': ['Entweder kommst du mit, oder du bleibst hier.', 'Either you come along, or you stay here.'],
+  'nicht nur ... sondern auch': ['Er ist nicht nur klug, sondern auch nett.', 'He is not only clever but also kind.'],
+  'je ... desto / umso': ['Je mehr ich lese, desto besser verstehe ich.', 'The more I read, the better I understand.'],
+  'zwar ... aber': ['Das Buch ist zwar lang, aber spannend.', 'The book is long, admittedly, but exciting.'],
+  'einerseits ... andererseits': ['Einerseits vermisse ich meine Heimat, andererseits gefällt es mir hier.', 'On the one hand I miss home, on the other hand I like it here.'],
+  'um ... zu': ['Ich lerne Deutsch, um in Deutschland zu arbeiten.', 'I am learning German in order to work in Germany.'],
+  'ohne ... zu': ['Er ging, ohne ein Wort zu sagen.', 'He left without saying a word.'],
+  '(an)statt ... zu': ['Statt zu lernen, sieht er fern.', 'Instead of studying, he watches TV.'],
+  'als ob': ['Er tut so, als ob er nichts wüsste.', 'He acts as if he knew nothing.'],
+};
+
 const MATCH_CACHE = new Map();
 function verbMatcher(inf) {
   if (!MATCH_CACHE.has(inf)) MATCH_CACHE.set(inf, matchForms(inf));
@@ -637,7 +721,7 @@ function groupHit(group, tokenSet) {
 function findPhrases(sentence) {
   const tokenSet = new Set(tokenize(sentence).map((t) => t.toLowerCase()));
   return PHRASES.filter((p) => p.groups.every((g) => groupHit(g, tokenSet)))
-    .map(({ phrase, meaning, grammar }) => ({ phrase, meaning, grammar: grammar || null }));
+    .map(({ phrase, meaning, grammar }) => ({ phrase, meaning, grammar: grammar || null, example: PHRASE_EXAMPLES[phrase] || null }));
 }
 
 // ---------- Sentence structure ----------
@@ -672,7 +756,8 @@ function analyzeClause(words, index, prev) {
     out.type = 'relative clause (probably)';
     out.starts_with = words.slice(0, startIdx + 1).join(' ');
     out.verb_position = `the conjugated verb goes to the END: "${words[words.length - 1]}"`;
-  } else if (index > 0 && lower.includes('zu') && lower[lower.length - 2] === 'zu') {
+  } else if (index > 0 && lower[lower.length - 2] === 'zu'
+    && (['um', 'ohne', 'statt', 'anstatt'].includes(first) || !lower.slice(0, -2).some((t) => { const h = FORM_INDEX.get(t); return h && h.kind === 'finite'; }))) {
     out.type = 'infinitive clause';
     out.verb_position = `"zu" + infinitive at the end: "zu ${words[words.length - 1]}"`;
   } else {
@@ -759,7 +844,7 @@ function formatSentence(sentence) {
     lines.push(line);
   }
   lines.push('FIXED PHRASES:');
-  if (a.fixed_phrases.length) a.fixed_phrases.forEach((p) => lines.push(`- ${p.phrase} = ${p.meaning}${p.grammar ? ` (${p.grammar})` : ''}`));
+  if (a.fixed_phrases.length) a.fixed_phrases.forEach((p) => lines.push(`- ${p.phrase} = ${p.meaning}${p.grammar ? ` (${p.grammar})` : ''}${p.example ? `. Beispiel: ${p.example[0]} (${p.example[1]})` : ''}`));
   else lines.push('- none found in the offline list (there may still be one: say "(unsure)")');
   lines.push('IRREGULAR VERBS:');
   if (a.irregular_verbs.length) a.irregular_verbs.forEach((v) => lines.push(`- ${v.form_in_sentence} → ${v.infinitive} (Präteritum ${v.praeteritum}, Partizip II ${v.partizip2}, Perfekt with ${v.auxiliary})`));
@@ -786,4 +871,4 @@ function formatWord(word) {
   return `UNKNOWN: ${w.note}`;
 }
 
-export { verbInfo, nounInfo, wordInfo, findPhrases, analyzeSentence, formatSentence, formatWord, tokenize, VERBS, PHRASES };
+export { PHRASE_EXAMPLES, verbInfo, nounInfo, wordInfo, findPhrases, analyzeSentence, formatSentence, formatWord, tokenize, VERBS, PHRASES };

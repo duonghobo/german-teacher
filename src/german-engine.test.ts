@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { verbInfo, nounInfo, wordInfo, analyzeSentence, findPhrases } from './german-engine.js';
+import { verbInfo, nounInfo, wordInfo, analyzeSentence, findPhrases, PHRASES, PHRASE_EXAMPLES } from './german-engine.js';
 
 const phraseNames = (s: string) => findPhrases(s).map((p: { phrase: string }) => p.phrase);
 
@@ -84,7 +84,19 @@ test('sentence structure: clauses, separable verbs, tense hints', () => {
   assert.equal(d.clauses[1].type, 'relative clause (probably)');
 
   assert.equal(analyzeSentence('Das hat mit mir zu tun.').clauses[0].type, 'main clause');
+  const f = analyzeSentence('Ich denke, die neuen Wörter haben mit dem Begriff Heimat zu tun.');
+  assert.equal(f.clauses[1].type, 'main clause');
+  assert.match(f.clauses[1].verb_position, /"haben"/);
+  assert.equal(analyzeSentence('Er versuchte, das Buch zu lesen.').clauses[1].type, 'infinitive clause');
 
   const e = analyzeSentence('Das Haus wurde 1990 gebaut.');
   assert.ok(e.clauses[0].tense_hints.some((h: string) => h.startsWith('Passiv')));
+});
+
+test('every fixed phrase has an example, and the example contains the phrase', () => {
+  for (const p of PHRASES as { phrase: string }[]) {
+    const ex = (PHRASE_EXAMPLES as Record<string, string[]>)[p.phrase];
+    assert.ok(ex, `missing example for "${p.phrase}"`);
+    assert.ok(phraseNames(ex[0]).includes(p.phrase), `example "${ex[0]}" does not match "${p.phrase}"`);
+  }
 });

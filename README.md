@@ -8,7 +8,7 @@ An offline German teacher with memory, for reading German books on an iPad or ph
 1. On the iPad, open this repo in Safari → **Code → Download ZIP**.
 2. In the **Files** app, tap `german-teacher-main.zip` to extract it. You get a folder `german-teacher-main` with `SKILL.md` inside.
 3. In Edge Gallery: **Agent Skills → + → Import local skill** (may be labelled *Import from local file*) → choose the folder `german-teacher-main`.
-4. Paste the [system prompt](SYSTEM_PROMPT.md) into the chat.
+4. No system prompt needed: the skill brings its own instructions. **Remove any old prompt** from earlier tests. Only if Gemma ignores the skill, use [SYSTEM_PROMPT.md](SYSTEM_PROMPT.md).
 5. Test (airplane mode on):
    - send `Die neuen Wörter haben mit dem Begriff Heimat zu tun.` → must find *mit etwas zu tun haben*
    - send `save: mit etwas zu tun haben = to have to do with`
@@ -21,8 +21,9 @@ If your app version has no local import, use **Load skill from URL** with `https
 ## Use
 | You send | What happens |
 |---|---|
-| a sentence from the book, or a screenshot | meaning, tense, structure, fixed phrases, key words, a flashcard line |
-| `word: Heimat` · `word: sich vorstellen` | correct forms and meanings |
+| a sentence from the book, or a screenshot | explanation in simple German (with English), tense, structure, fixed phrases **with examples**, key words, a flashcard line |
+| `word: Heimat` · `Was bedeutet Begriff?` | correct forms, meanings, **3 example sentences** (your book sentence first, if you saved the word) |
+| `auf Englisch` · `auf Deutsch` | switches the answer language; remembered |
 | `save: X = meaning` | saves X for spaced review (1, 3, 7, 14, 30 days) |
 | `quiz` | asks what is due today, plus your recurring mistakes |
 | `fix: Bahnhofsuhr is die Bahnhofsuhr, -en` | **self-correction**: overrides the built-in tables from now on |
@@ -43,7 +44,7 @@ fix: / check:  ──► memory on the device ──► export ──► evoluti
 
 ## Develop
 ```
-npm test        # 13 tests: grammar facts, memory, and the built page run like Edge Gallery calls it
+npm test        # 15 tests: grammar facts, memory, and the built page run like Edge Gallery calls it
 npm run build   # regenerates SKILL.md and scripts/index.html from src/
 ```
 | File | Role |

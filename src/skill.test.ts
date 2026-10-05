@@ -75,3 +75,21 @@ test('built page works like Edge Gallery calls it, with memory between calls', a
   assert.match((await run({ action: 'stats' })).result, /saved between chats/);
   assert.match((await run({})).error, /Unknown action/);
 });
+
+test('answers in German by default with examples; English on request; remembered', async () => {
+  const store = createMapStore();
+  const mem = await openMemory(store, T0);
+  const de = handle({ action: 'analyze', sentence: 'Das hat nichts mit dir zu tun.' }, mem, T0).result;
+  assert.match(de, /ANTWORTE AUF DEUTSCH/);
+  assert.match(de, /Beispiel: Das hat nichts mit dir zu tun\. \(That has nothing to do with you\.\)/);
+  assert.match(handle({ action: 'word', word: 'Begriff' }, mem, T0).result, /BEISPIELE: 3 kurze Sätze/);
+
+  handle({ action: 'save', item: 'Begriff', meaning: 'term', example: 'Das hat mit dem Begriff Heimat zu tun.' }, mem, T0);
+  assert.match(handle({ action: 'word', word: 'Begriff' }, mem, T0).result, /Satz aus dem Buch des Lernenden: "Das hat mit dem Begriff Heimat zu tun\."/);
+
+  assert.match(handle({ action: 'settings', lang: 'English' }, mem, T0).result, /English/);
+  await mem.flush();
+  const later = await openMemory(store, T0 + DAY);
+  assert.match(handle({ action: 'analyze', sentence: 'Ich verstehe nur Bahnhof.' }, later, T0 + DAY).result, /ANSWER IN ENGLISH/);
+  assert.match(handle({ action: 'settings', lang: 'de' }, later, T0).result, /Deutsch/);
+});

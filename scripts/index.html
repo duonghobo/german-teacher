@@ -623,6 +623,90 @@ const PHRASES = [
   groups: pattern.split(' + ').map((g) => g.startsWith('V:') ? { verb: g.slice(2) } : { words: new Set(g.split('|')) }),
 }));
 
+// One checked example per phrase: [German, English]. A test makes sure each example is found by its own pattern.
+const PHRASE_EXAMPLES = {
+  'mit etwas zu tun haben': ['Das hat nichts mit dir zu tun.', 'That has nothing to do with you.'],
+  'es geht um': ['In dem Buch geht es um Heimat.', 'The book is about home.'],
+  'es handelt sich um': ['Es handelt sich um ein Missverständnis.', 'It is a misunderstanding.'],
+  'von etwas handeln': ['Der Roman handelt von einer Familie.', 'The novel is about a family.'],
+  'es gibt': ['Es gibt hier keinen Bahnhof.', 'There is no station here.'],
+  'es kommt auf ... an': ['Es kommt auf das Wetter an.', 'It depends on the weather.'],
+  'sich freuen auf': ['Ich freue mich auf das Wochenende.', 'I am looking forward to the weekend.'],
+  'sich freuen über': ['Sie freut sich über das Geschenk.', 'She is happy about the present.'],
+  'warten auf': ['Wir warten auf den Zug.', 'We are waiting for the train.'],
+  'denken an': ['Ich denke oft an meine Familie.', 'I often think of my family.'],
+  'sich erinnern an': ['Erinnerst du dich an unsere Kindheit?', 'Do you remember our childhood?'],
+  'sich interessieren für': ['Er interessiert sich für Geschichte.', 'He is interested in history.'],
+  'sich kümmern um': ['Sie kümmert sich um ihre Mutter.', 'She takes care of her mother.'],
+  'Angst haben vor': ['Das Kind hat Angst vor dem Hund.', 'The child is afraid of the dog.'],
+  'sich fürchten vor': ['Viele fürchten sich vor der Zukunft.', 'Many people are afraid of the future.'],
+  'teilnehmen an': ['Ich nehme an dem Kurs teil.', 'I am taking part in the course.'],
+  'abhängen von': ['Das hängt vom Preis ab.', 'That depends on the price.'],
+  'bestehen aus': ['Das Team besteht aus fünf Personen.', 'The team consists of five people.'],
+  'sich beschäftigen mit': ['Ich beschäftige mich mit deutscher Literatur.', 'I am studying German literature.'],
+  'sich beschweren über': ['Er beschwert sich über den Lärm.', 'He complains about the noise.'],
+  'bitten um': ['Darf ich Sie um Hilfe bitten?', 'May I ask you for help?'],
+  'glauben an': ['Sie glaubt an eine bessere Zukunft.', 'She believes in a better future.'],
+  'sich gewöhnen an': ['Ich habe mich an das Wetter gewöhnt.', 'I have got used to the weather.'],
+  'hoffen auf': ['Wir hoffen auf gutes Wetter.', 'We are hoping for good weather.'],
+  'sich verlassen auf': ['Du kannst dich auf mich verlassen.', 'You can rely on me.'],
+  'sich vorbereiten auf': ['Ich bereite mich auf die Prüfung vor.', 'I am preparing for the exam.'],
+  'achten auf': ['Achte auf die Aussprache!', 'Pay attention to the pronunciation!'],
+  'sich entscheiden für': ['Sie hat sich für das rote Kleid entschieden.', 'She chose the red dress.'],
+  'erzählen von': ['Er erzählt von seiner Heimat.', 'He talks about his home country.'],
+  'fragen nach': ['Sie fragt nach dem Weg.', 'She asks for the way.'],
+  'gehören zu': ['Das gehört zu meinen Aufgaben.', 'That is part of my tasks.'],
+  'leiden unter': ['Viele leiden unter Heimweh.', 'Many people suffer from homesickness.'],
+  'nachdenken über': ['Ich denke über deine Frage nach.', 'I am thinking about your question.'],
+  'sich sehnen nach': ['Er sehnt sich nach seiner Heimat.', 'He longs for his home.'],
+  'sorgen für': ['Die Eltern sorgen für ihre Kinder.', 'The parents look after their children.'],
+  'träumen von': ['Sie träumt von einer Reise nach Japan.', 'She dreams of a trip to Japan.'],
+  'sich unterhalten über': ['Wir unterhalten uns über das Buch.', 'We are talking about the book.'],
+  'sich verabschieden von': ['Ich verabschiede mich von meinen Freunden.', 'I say goodbye to my friends.'],
+  'verzichten auf': ['Ich verzichte heute auf Zucker.', 'I am doing without sugar today.'],
+  'zweifeln an': ['Er zweifelt an seiner Entscheidung.', 'He doubts his decision.'],
+  'sich ärgern über': ['Ich ärgere mich über den Fehler.', 'I am annoyed about the mistake.'],
+  'Lust haben auf': ['Hast du Lust auf einen Kaffee?', 'Do you feel like a coffee?'],
+  'Wert legen auf': ['Sie legt großen Wert auf Pünktlichkeit.', 'She attaches great importance to punctuality.'],
+  'eine Rolle spielen': ['Das Geld spielt keine Rolle.', 'Money does not matter.'],
+  'in Frage kommen': ['Das kommt nicht in Frage.', 'That is out of the question.'],
+  'zur Verfügung stehen': ['Ich stehe Ihnen gern zur Verfügung.', 'I am happy to help you.'],
+  'in Kauf nehmen': ['Wir nehmen die lange Reise in Kauf.', 'We accept the long journey.'],
+  'zum Ausdruck bringen': ['Das Gedicht bringt die Sehnsucht zum Ausdruck.', 'The poem expresses the longing.'],
+  'in Anspruch nehmen': ['Das nimmt viel Zeit in Anspruch.', 'That takes up a lot of time.'],
+  'Recht haben': ['Du hast recht.', 'You are right.'],
+  'sich Mühe geben': ['Er gibt sich viel Mühe.', 'He makes a big effort.'],
+  'ums Leben kommen': ['Bei dem Unfall kam niemand ums Leben.', 'Nobody died in the accident.'],
+  'jemandem schwer/leicht fallen': ['Deutsch fällt mir nicht leicht.', 'German is not easy for me.'],
+  'zu Hause': ['Ich bin heute zu Hause.', 'I am at home today.'],
+  'nach Hause': ['Ich gehe jetzt nach Hause.', 'I am going home now.'],
+  'sich zu Hause fühlen': ['In Berlin fühle ich mich zu Hause.', 'I feel at home in Berlin.'],
+  'sich fremd fühlen': ['Am Anfang fühlte sie sich fremd.', 'At first she felt like a stranger.'],
+  'Heimweh haben': ['Im Winter habe ich oft Heimweh.', 'In winter I am often homesick.'],
+  'Wurzeln schlagen': ['Nach zehn Jahren hat er hier Wurzeln geschlagen.', 'After ten years he has put down roots here.'],
+  'nur Bahnhof verstehen': ['Bei Physik verstehe ich nur Bahnhof.', 'Physics is all Greek to me.'],
+  'die Daumen drücken': ['Ich drücke dir die Daumen!', 'I will keep my fingers crossed for you!'],
+  'den Nagel auf den Kopf treffen': ['Mit diesem Satz hast du den Nagel auf den Kopf getroffen.', 'With that sentence you hit the nail on the head.'],
+  'um den heißen Brei reden': ['Red nicht um den heißen Brei!', 'Stop beating around the bush!'],
+  'die Nase voll haben': ['Ich habe die Nase voll vom Regen.', 'I am fed up with the rain.'],
+  'auf dem Holzweg sein': ['Da bist du auf dem Holzweg.', 'You are on the wrong track there.'],
+  'ins Fettnäpfchen treten': ['Mit der Frage bin ich ins Fettnäpfchen getreten.', 'I put my foot in it with that question.'],
+  'unter vier Augen': ['Können wir unter vier Augen sprechen?', 'Can we talk in private?'],
+  'zwei Fliegen mit einer Klappe schlagen': ['So schlagen wir zwei Fliegen mit einer Klappe.', 'That way we kill two birds with one stone.'],
+  'Das ist nicht mein Bier': ['Wie er das macht, ist nicht mein Bier.', 'How he does it is not my problem.'],
+  'sowohl ... als auch': ['Sie spricht sowohl Deutsch als auch Englisch.', 'She speaks both German and English.'],
+  'weder ... noch': ['Ich habe weder Zeit noch Geld.', 'I have neither time nor money.'],
+  'entweder ... oder': ['Entweder kommst du mit, oder du bleibst hier.', 'Either you come along, or you stay here.'],
+  'nicht nur ... sondern auch': ['Er ist nicht nur klug, sondern auch nett.', 'He is not only clever but also kind.'],
+  'je ... desto / umso': ['Je mehr ich lese, desto besser verstehe ich.', 'The more I read, the better I understand.'],
+  'zwar ... aber': ['Das Buch ist zwar lang, aber spannend.', 'The book is long, admittedly, but exciting.'],
+  'einerseits ... andererseits': ['Einerseits vermisse ich meine Heimat, andererseits gefällt es mir hier.', 'On the one hand I miss home, on the other hand I like it here.'],
+  'um ... zu': ['Ich lerne Deutsch, um in Deutschland zu arbeiten.', 'I am learning German in order to work in Germany.'],
+  'ohne ... zu': ['Er ging, ohne ein Wort zu sagen.', 'He left without saying a word.'],
+  '(an)statt ... zu': ['Statt zu lernen, sieht er fern.', 'Instead of studying, he watches TV.'],
+  'als ob': ['Er tut so, als ob er nichts wüsste.', 'He acts as if he knew nothing.'],
+};
+
 const MATCH_CACHE = new Map();
 function verbMatcher(inf) {
   if (!MATCH_CACHE.has(inf)) MATCH_CACHE.set(inf, matchForms(inf));
@@ -642,7 +726,7 @@ function groupHit(group, tokenSet) {
 function findPhrases(sentence) {
   const tokenSet = new Set(tokenize(sentence).map((t) => t.toLowerCase()));
   return PHRASES.filter((p) => p.groups.every((g) => groupHit(g, tokenSet)))
-    .map(({ phrase, meaning, grammar }) => ({ phrase, meaning, grammar: grammar || null }));
+    .map(({ phrase, meaning, grammar }) => ({ phrase, meaning, grammar: grammar || null, example: PHRASE_EXAMPLES[phrase] || null }));
 }
 
 // ---------- Sentence structure ----------
@@ -677,7 +761,8 @@ function analyzeClause(words, index, prev) {
     out.type = 'relative clause (probably)';
     out.starts_with = words.slice(0, startIdx + 1).join(' ');
     out.verb_position = `the conjugated verb goes to the END: "${words[words.length - 1]}"`;
-  } else if (index > 0 && lower.includes('zu') && lower[lower.length - 2] === 'zu') {
+  } else if (index > 0 && lower[lower.length - 2] === 'zu'
+    && (['um', 'ohne', 'statt', 'anstatt'].includes(first) || !lower.slice(0, -2).some((t) => { const h = FORM_INDEX.get(t); return h && h.kind === 'finite'; }))) {
     out.type = 'infinitive clause';
     out.verb_position = `"zu" + infinitive at the end: "zu ${words[words.length - 1]}"`;
   } else {
@@ -764,7 +849,7 @@ function formatSentence(sentence) {
     lines.push(line);
   }
   lines.push('FIXED PHRASES:');
-  if (a.fixed_phrases.length) a.fixed_phrases.forEach((p) => lines.push(`- ${p.phrase} = ${p.meaning}${p.grammar ? ` (${p.grammar})` : ''}`));
+  if (a.fixed_phrases.length) a.fixed_phrases.forEach((p) => lines.push(`- ${p.phrase} = ${p.meaning}${p.grammar ? ` (${p.grammar})` : ''}${p.example ? `. Beispiel: ${p.example[0]} (${p.example[1]})` : ''}`));
   else lines.push('- none found in the offline list (there may still be one: say "(unsure)")');
   lines.push('IRREGULAR VERBS:');
   if (a.irregular_verbs.length) a.irregular_verbs.forEach((v) => lines.push(`- ${v.form_in_sentence} → ${v.infinitive} (Präteritum ${v.praeteritum}, Partizip II ${v.partizip2}, Perfekt with ${v.auxiliary})`));
@@ -801,7 +886,7 @@ const DAY = 24 * 60 * 60 * 1000;
 const BOX_DAYS = [0, 1, 3, 7, 14, 30]; // Leitner boxes 1..5
 
 function emptyMemory() {
-  return { v: 1, vocab: {}, corrections: {}, mistakes: [], lastExport: 0 };
+  return { v: 1, vocab: {}, corrections: {}, mistakes: [], lastExport: 0, prefs: { lang: 'de' } };
 }
 
 function memKey(text) {
@@ -876,7 +961,7 @@ async function openMemory(store, now = Date.now()) {
   let data = emptyMemory();
   try {
     const text = await store.load();
-    if (text) data = { ...emptyMemory(), ...JSON.parse(text) };
+    if (text) { const saved = JSON.parse(text); data = { ...emptyMemory(), ...saved, prefs: { ...emptyMemory().prefs, ...(saved.prefs || {}) } }; }
   } catch (e) { data = emptyMemory(); }
   return {
     data,
@@ -977,6 +1062,12 @@ function stats(mem, now = Date.now()) {
   ].join('\n');
 }
 
+function setLanguage(mem, lang) {
+  const l = /^(en|english|englisch)/i.test(String(lang || '')) ? 'en' : 'de';
+  mem.data.prefs.lang = l;
+  return l === 'de' ? 'Ab jetzt antworte ich auf Deutsch (einfaches Deutsch, B1).' : 'From now on I answer in English.';
+}
+
 // Lines for the repo's evolution/ files; marks them exported.
 function exportNew(mem, now = Date.now()) {
   const day = new Date(now).toISOString().slice(0, 10);
@@ -998,7 +1089,49 @@ function exportNew(mem, now = Date.now()) {
 // into scripts/index.html (import/export lines are stripped there).
 
 
-const ACTIONS = ['analyze', 'word', 'save', 'fix', 'mistake', 'quiz', 'review', 'recall', 'stats', 'export'];
+const ACTIONS = ['analyze', 'word', 'save', 'fix', 'mistake', 'quiz', 'review', 'recall', 'stats', 'export', 'settings'];
+
+// The answer format travels with every tool result, so the model sees it right next to the facts.
+const FORMAT = {
+  de: {
+    analyze: `ANTWORTE AUF DEUTSCH (einfaches Deutsch, Niveau B1), genau in diesem Format:
+1. BEDEUTUNG: Erkläre den Satz in einfachem Deutsch. Dann: (English: <natürliche Übersetzung>)
+2. ZEITFORM: die Zeitform jedes Verbs und warum der Autor sie benutzt.
+3. SATZBAU: erkläre die CLAUSES-Zeilen in einfachen Worten.
+4. FESTE AUSDRÜCKE: die Ausdrücke vom Tool, wörtlich -> wirkliche Bedeutung, mit dem Beispiel vom Tool. Sonst "keine".
+5. WICHTIGE WÖRTER: bis zu 3 Wörter über A2: Wort – Erklärung auf Deutsch (English) – ein kurzer Beispielsatz (English).
+6. KARTE: Vorderseite: <Ausdruck in einem kurzen deutschen Satz> | Rückseite: <Bedeutung>
+Grammatikbegriffe auf Deutsch (Präsens, Akkusativ, Nebensatz). Nichts davor, nichts danach.`,
+    word: `ANTWORTE AUF DEUTSCH (einfaches Deutsch, Niveau B1):
+- FORMEN: genau wie vom Tool, nichts ändern.
+- BEDEUTUNGEN: nummeriert; jede Bedeutung auf Deutsch erklärt, dann (English: ...).
+- BEISPIELE: 3 kurze Sätze, ein Satz pro Bedeutung, jeder mit (English: ...).{saved}
+- MIT/OHNE "SICH": nur wenn das Tool es angibt.`,
+  },
+  en: {
+    analyze: `ANSWER IN ENGLISH, exactly in this format:
+1. MEANING: a natural English translation.
+2. TENSE: the tense of each verb and why it is used.
+3. STRUCTURE: explain the CLAUSES lines in simple words.
+4. FIXED PHRASES: the phrases from the tool, literal -> real meaning, with the tool's example. Otherwise "none".
+5. KEY WORDS: up to 3 words above A2: word – meaning – one short German example sentence (English).
+6. CARD: Front: <key phrase in a short German sentence> | Back: <its meaning>
+Nothing before or after.`,
+    word: `ANSWER IN ENGLISH:
+- FORMS: exactly as the tool gives them.
+- MEANINGS: numbered, each explained.
+- EXAMPLES: 3 short German sentences, one per meaning, each with its English translation.{saved}
+- WITH/WITHOUT "SICH": only if the tool gives it.`,
+  },
+};
+
+function answerFormat(mem, kind, savedExample) {
+  const lang = (mem.data.prefs && mem.data.prefs.lang) === 'en' ? 'en' : 'de';
+  const saved = savedExample
+    ? (lang === 'de' ? `\n  Der erste Beispielsatz ist der Satz aus dem Buch des Lernenden: "${savedExample}"` : `\n  Use the learner's own sentence as the first example: "${savedExample}"`)
+    : '';
+  return FORMAT[lang][kind].replace('{saved}', saved);
+}
 
 function withMemory(mem, text, base) {
   const lines = [];
@@ -1023,12 +1156,13 @@ function handle(input, mem, now = Date.now()) {
     case 'analyze': {
       const sentence = need('sentence');
       if (!sentence) return { error: 'Missing field "sentence".' };
-      return { result: withMemory(mem, sentence, formatSentence(sentence)) };
+      return { result: `${withMemory(mem, sentence, formatSentence(sentence))}\n\n${answerFormat(mem, 'analyze')}` };
     }
     case 'word': {
       const word = need('word');
       if (!word) return { error: 'Missing field "word".' };
-      return { result: withMemory(mem, word, formatWord(word)) };
+      const saved = mem.data.vocab[memKey(word)];
+      return { result: `${withMemory(mem, word, formatWord(word))}\n\n${answerFormat(mem, 'word', saved && saved.example)}` };
     }
     case 'save': return { result: saveWord(mem, { item: need('item'), meaning: need('meaning'), example: need('example') }, now) };
     case 'fix': return { result: addCorrection(mem, { item: need('item'), correction: need('correction') }, now) };
@@ -1038,6 +1172,7 @@ function handle(input, mem, now = Date.now()) {
     case 'recall': return { result: recall(mem, need('query')) };
     case 'stats': return { result: stats(mem, now) };
     case 'export': return { result: exportNew(mem, now) };
+    case 'settings': return { result: setLanguage(mem, need('lang')) };
   }
   return { error: 'Unreachable' };
 }

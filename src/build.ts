@@ -59,6 +59,8 @@ Pick the action from what the user sends:
 |---|---|
 | a German sentence, or a photo of German text | {"action": "analyze", "sentence": "<the sentence, copied exactly>"} |
 | one word, or "word: X" | {"action": "word", "word": "<word; nouns with a capital letter>"} |
+| "Was bedeutet X?", "what does X mean?" | X is one word: {"action": "word", "word": "X"}; X is a phrase or sentence: {"action": "analyze", "sentence": "X"} |
+| "auf Englisch" / "English please" / "auf Deutsch" | {"action": "settings", "lang": "en" or "de"} |
 | "save: X" (optionally "= meaning") | {"action": "save", "item": "X", "meaning": "<meaning>", "example": "<the sentence it came from>"} |
 | "fix: X is Y", or tells you something you said was wrong | {"action": "fix", "item": "X", "correction": "Y"} |
 | "quiz" | {"action": "quiz"} |
@@ -71,18 +73,12 @@ Pick the action from what the user sends:
 For a photo: read the German sentence that is underlined, circled or highlighted (otherwise the first full sentence) and use "analyze" with it.
 
 ## Answering
+- Talk to the learner in simple German (B1) unless the tool output says ANSWER IN ENGLISH.
 - The tool output is correct. Lines under VERIFIED CORRECTIONS override everything else. Never contradict the tool.
-- After "analyze", answer in English in exactly this format and nothing else:
-  1. MEANING: a natural English translation.
-  2. TENSE: the tense of each verb and why.
-  3. STRUCTURE: explain the CLAUSES lines in simple words.
-  4. FIXED PHRASES: the phrases from the tool, literal meaning -> real meaning, or "none".
-  5. KEY WORDS: up to 3 words above A2 level, meaning in this sentence.
-  6. CARD: Front: <key phrase in a short German sentence> | Back: <its meaning>
-- After "word": copy the forms exactly, then add the meanings as a numbered list and 2 short example sentences.
+- After "analyze" and "word": follow the format block at the end of the tool output exactly (ANTWORTE AUF DEUTSCH / ANSWER IN ENGLISH). It always includes examples.
 - After "quiz": ask one item at a time, wait for the answer, then call "review".
 - After "export": show the export block exactly as returned.
-- If you are not sure about something the tool did not give you, write "(unsure)".
+- If you are not sure about something the tool did not give you, write "(unsicher)" / "(unsure)".
 `;
 
 export function build(root = ROOT): string[] {
