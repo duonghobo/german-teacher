@@ -26,6 +26,7 @@ What this project is for, what was decided and why, and what was learned. Read t
    - *On the device*: localStorage mirrored to IndexedDB inside the skill. Saved words (Leitner review 1/3/7/14/30 days), verified corrections (`fix:`) that override the tables, the learner's mistakes (`check:`). Instant and offline.
    - *In the repo*: `export` → `evolution/*.jsonl` → table rows + tests + Discovered rules → new release. Permanent and tested.
 9. **German by default, examples always** (v2.1). The learner wants to be taught in German. Every analyze/word result ends with the answer format in the current language (ANTWORTE AUF DEUTSCH / ANSWER IN ENGLISH), so the format sits right next to the facts and an old pasted prompt can't override it. Every fixed phrase carries a checked example; word answers ask for 3 examples, and the learner's own book sentence comes first if the word was saved. `settings` switches the language and is remembered.
+10. **Writing check = a second, specialised model** (2026-10-05). Hugging Face has no small model that explains German sentences to learners, but it has one for correcting learner writing: langlm-de (EuroLLM-1.7B on Falko-MERLIN, 755 MB GGUF, MIT). It can't run in Edge Gallery (LiteRT only), so it runs in PocketPal in Slide Over; the learner is fine with a second app. It needs its raw prompt (no chat template). See docs/langlm.md.
 
 ## What failed (keep these as regression cases)
 | Version | Failure |
@@ -44,8 +45,6 @@ Lesson: a small on-device model can't hold many jobs in one answer and can't be 
 - About 160 nouns with gender and plural (including the Heimat topic), compound-noun rule (the last part decides), ending rules with reliability notes, nominalised infinitives → das.
 - About 80 phrases: verb + preposition pairs, functional verb phrases (*zur Verfügung stehen*), idioms, two-part connectors (*sowohl … als auch*, *je … desto*, *um … zu*).
 - Clauses: subordinate clauses (verb at the end), relative clauses (only after a noun), infinitive clauses, verb in position 2, separable particle at the end, tense hints (Perfekt, Plusquamperfekt, Passiv, Futur I, Konjunktiv II).
-
-10. **Writing check = a second, specialised model** (2026-10-05). Hugging Face has no small model that explains German sentences to learners, but it has one for correcting learner writing: langlm-de (EuroLLM-1.7B on Falko-MERLIN, 755 MB GGUF, MIT). It can't run in Edge Gallery (LiteRT only), so it runs in PocketPal in Slide Over; the learner is fine with a second app. It needs its raw prompt (no chat template). See docs/langlm.md.
 
 ## Discovered rules
 Patterns learned the hard way. Each one has a test.
