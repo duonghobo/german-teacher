@@ -82,3 +82,4 @@ Patterns learned the hard way. Each one has a test.
 - 2026-10-05: Model search. No small German *tutor* model exists; langlm-de added as the writing checker in PocketPal (docs/langlm.md). Reading stays with Gemma + skill.
 - 2026-10-05: v2.3. "Begriff haben" asked on device (and to Siri, which failed). Added 4 Begriff idioms with examples; noun lookups now list idioms containing the noun. Rule 6.
 - 2026-10-05: v2.4. On device, "begriffen haben" was called a regular verb and Gemma refused to give a meaning. Added prefixed-form resolution (begriffen → begreifen) and short English meanings for ~190 verbs and ~170 nouns. Rules 7–8. 21 tests.
+- 2026-10-05: Alternatives. Device: iPad Air (M-series, 8 GB), iPadOS 26, Apple Intelligence on, Gemma 4 E4B. Shortlisted Shortcuts "Use Model → On-Device", Locally AI (MLX), langlm in PocketPal; Noema as fallback. Test plan in docs/alternatives.md; nothing tested on device yet.
